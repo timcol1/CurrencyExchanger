@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.Scanner;
 
 public class App {
-
+    //example with sqlite connection and etc.
 
     public static void main(String[] args) {
         App app = new App();
@@ -14,6 +14,7 @@ public class App {
 
 
     void open() {
+
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:sqlite/users.db")) {
             System.out.println("Connected");
             select(connection);
