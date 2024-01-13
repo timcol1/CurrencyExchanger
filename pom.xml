@@ -24,7 +24,21 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.44.1.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>5.0.0</version>
+            <!-- говорит то что для компиляции можно использовать но для веб архива не нужно -->
+            <scope>provided</scope>
+        </dependency>
+
+
+
+
+
     </dependencies>
+
 
     <build>
         <plugins>
