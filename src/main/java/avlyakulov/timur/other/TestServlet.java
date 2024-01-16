@@ -1,12 +1,10 @@
-package avlyakulov.timur.controller;
+package avlyakulov.timur.other;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -14,14 +12,15 @@ import java.io.IOException;
 @WebServlet(name = "Test", urlPatterns = {"/test"})
 public class TestServlet extends HttpServlet {
 
-    private static Logger logger = LoggerFactory.getLogger(TestServlet.class);
+    //private static Logger logger = LoggerFactory.getLogger(TestServlet.class);
+    private static java.util.logging.Logger loggerJul = java.util.logging.Logger.getLogger(TestServlet.class.getName());
 
 
     //здесь мы можем уже задавать какие то классы и прочее, то есть инициализация классов в сервлете
     //срабатывает 1 раз и все
     @Override
     public void init() throws ServletException {
-        logger.info("Servlet is created");
+        loggerJul.info("Servlet is created");
     }
 
     @Override

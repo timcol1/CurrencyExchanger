@@ -1,4 +1,4 @@
-package avlyakulov.timur.controller;
+package avlyakulov.timur.other;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
