@@ -19,6 +19,7 @@
         <sqlite.version>3.44.1.0</sqlite.version>
         <jakarta.version>5.0.0</jakarta.version>
         <slf4j.version>2.0.9</slf4j.version>
+        <jackson.version>2.16.0</jackson.version>
     </properties>
 
     <dependencies>
@@ -36,6 +37,19 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--        <dependency>-->
+        <!--            <groupId>org.slf4j</groupId>-->
+        <!--            <artifactId>slf4j-api</artifactId>-->
+        <!--            <version>${slf4j.version}</version>-->
+        <!--        </dependency>-->
+
+        <!--        <dependency>-->
+        <!--            <groupId>org.slf4j</groupId>-->
+        <!--            <artifactId>slf4j-jdk14</artifactId>-->
+        <!--            <version>${slf4j.version}</version>-->
+        <!--        </dependency>-->
+
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -44,10 +58,15 @@
 
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-jdk14</artifactId>
+            <artifactId>slf4j-simple</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
 
     </dependencies>
 
