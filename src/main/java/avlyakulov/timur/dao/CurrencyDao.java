@@ -10,22 +10,24 @@ import java.util.Optional;
 public class CurrencyDao {
 
     //todo сделать абстрактным чтоб не привязываться к конкретной реализации
-    private final String DB_URL = "jdbc:sqlite:sqlite/currencies.db";
     private final String findAllQuery = "SELECT * FROM Currencies";
 
+    private ConnectionBuilder connectionBuilder;
 
-    public CurrencyDao() {
-        try {
-            Class.forName("org.sqlite.JDBC");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    public void setConnectionBuilder(ConnectionBuilder connectionBuilder) {
+        this.connectionBuilder = connectionBuilder;
     }
+
+    private Connection getConnection() throws SQLException {
+        return connectionBuilder.getConnection();
+    }
+
 
     public Optional<List<Currency>> findAll() {
         List<Currency> currencies = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(DB_URL)) {
-            PreparedStatement preparedStatement = connection.prepareStatement(findAllQuery);
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(findAllQuery)) {
+
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Currency currency = new Currency(

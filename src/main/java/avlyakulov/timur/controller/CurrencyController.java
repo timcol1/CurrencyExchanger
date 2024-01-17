@@ -29,5 +29,4 @@ public class CurrencyController extends HttpServlet {
         out.print(objectMapper.writeValueAsString(currencies));
         out.flush();
     }
-
 }
