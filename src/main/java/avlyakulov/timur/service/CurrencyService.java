@@ -1,7 +1,9 @@
 package avlyakulov.timur.service;
 
 import avlyakulov.timur.custom_exception.BadCurrencyCodeException;
+import avlyakulov.timur.custom_exception.CurrencyAlreadyExists;
 import avlyakulov.timur.custom_exception.CurrencyNotFoundException;
+import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissing;
 import avlyakulov.timur.dao.CurrencyDaoImpl;
 import avlyakulov.timur.connection.PoolConnectionBuilder;
 import avlyakulov.timur.model.Currency;
@@ -28,10 +30,36 @@ public class CurrencyService {
             code = code.substring(1);
             Optional<Currency> currency = currencyDaoImpl.findCurrencyByCode(code);
             if (currency.isEmpty()) {
-                throw new CurrencyNotFoundException("Currency with this code wasn't found");
+                throw new CurrencyNotFoundException("Currency with this code " + code + " wasn't found");
             } else {
                 return currency.get();
             }
         }
+    }
+
+    public Currency createCurrency(String code, String fullName, String sign) throws RequiredFormFieldIsMissing, CurrencyAlreadyExists {
+        if (checkValidityOfParameters(code, fullName, sign)) {
+            Optional<Currency> currency = findSimpleByCode(code);
+            if (currency.isPresent()) {
+                throw new CurrencyAlreadyExists("Currency with such code " + code + " is already exists");
+            } else {
+                return currencyDaoImpl.create(new Currency(code, fullName, sign));
+            }
+        } else {
+            throw new RequiredFormFieldIsMissing("A required field in currency is missing");
+        }
+    }
+
+    private Optional<Currency> findSimpleByCode(String code) {
+        return currencyDaoImpl.findCurrencyByCode(code);
+    }
+
+    private boolean checkValidityOfParameters(String... parameters) {
+        for (String parameter : parameters) {
+            if (parameter == null || parameter.isBlank()) {
+                return false;
+            }
+        }
+        return true;
     }
 }
