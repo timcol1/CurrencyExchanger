@@ -13,20 +13,22 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet(name = "CurrencyController", urlPatterns = "/currencies")
-public class CurrencyController extends HttpServlet {
+@WebServlet(urlPatterns = "/currencies")
+public class CurrenciesServlet extends HttpServlet {
 
-    CurrencyService currencyService = new CurrencyService();
+    private final CurrencyService currencyService = new CurrencyService();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
         List<Currency> currencies = currencyService.findAll();
-        //resp.getWriter().println(objectMapper.writeValueAsString(currencies));
         PrintWriter out = resp.getWriter();
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
+        resp.setStatus(HttpServletResponse.SC_OK);//status 200
         out.print(objectMapper.writeValueAsString(currencies));
         out.flush();
     }
+
+
 }
