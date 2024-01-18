@@ -13,5 +13,5 @@ public interface CrudDao<T, S> {
 
     Optional<T> update(S id, T t);
 
-    Optional<T> create(T t);
+    T create(T t);
 }

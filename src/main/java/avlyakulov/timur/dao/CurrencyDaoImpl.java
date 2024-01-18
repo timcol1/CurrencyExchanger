@@ -25,7 +25,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
 
     @Override
     public List<Currency> findAll() {
-        final String findAllQuery = "Select * From Currencies";
+        final String findAllQuery = "Select * From Currencies;";
 
         List<Currency> currencies = new ArrayList<>();
         try (Connection connection = getConnection();
@@ -54,7 +54,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
 
     @Override
     public Optional<Currency> findCurrencyByCode(String code) {
-        String findByCodeQuery = "Select * From Currencies Where Code = ?";
+        String findByCodeQuery = "Select * From Currencies Where Code = ?;";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(findByCodeQuery)) {
             preparedStatement.setString(1, code);
@@ -75,8 +75,21 @@ public class CurrencyDaoImpl implements CurrencyDao {
     }
 
     @Override
-    public Optional<Currency> create(Currency currency) {
-        return Optional.empty();
+    public Currency create(Currency currency) {
+        String createCurrencyQuery = "Insert into Currencies(Code, FullName , Sign) values (?, ?, ?);";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(createCurrencyQuery)) {
+
+            preparedStatement.setString(1, currency.getCode());
+            preparedStatement.setString(2, currency.getFullName());
+            preparedStatement.setString(3, currency.getSign());
+
+            preparedStatement.executeUpdate();
+
+            return findCurrencyByCode(currency.getCode()).get();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
