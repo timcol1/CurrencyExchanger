@@ -1,4 +1,4 @@
-package avlyakulov.timur.controller;
+package avlyakulov.timur.servlets;
 
 import avlyakulov.timur.custom_exception.BadCurrencyCodeException;
 import avlyakulov.timur.custom_exception.CurrencyNotFoundException;
@@ -30,18 +30,12 @@ public class CurrencyServlet extends HttpServlet {
         String currencyCode = url.substring(lengthUrl);
         try {
             Currency currency = currencyService.findByCode(currencyCode);
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
             resp.setStatus(HttpServletResponse.SC_OK);
             out.print(objectMapper.writeValueAsString(currency));
         } catch (BadCurrencyCodeException e) {
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);//status 400
             out.print(objectMapper.writeValueAsString(new ErrorResponse(e.getMessage())));
         } catch (CurrencyNotFoundException e) {
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);//status 404
             out.print(objectMapper.writeValueAsString(new ErrorResponse(e.getMessage())));
         }

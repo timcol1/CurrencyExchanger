@@ -1,4 +1,4 @@
-package avlyakulov.timur.controller;
+package avlyakulov.timur.servlets;
 
 import avlyakulov.timur.custom_exception.CurrencyAlreadyExists;
 import avlyakulov.timur.custom_exception.ErrorResponse;
@@ -26,8 +26,6 @@ public class CurrenciesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Currency> currencies = currencyService.findAll();
         PrintWriter out = resp.getWriter();
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
         resp.setStatus(HttpServletResponse.SC_OK);//status 200
         out.print(objectMapper.writeValueAsString(currencies));
         out.flush();
@@ -41,18 +39,12 @@ public class CurrenciesServlet extends HttpServlet {
         PrintWriter out = resp.getWriter();
         try {
             Currency currency = currencyService.createCurrency(code, fullName, sign);
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
             resp.setStatus(HttpServletResponse.SC_OK);//status 200
             out.print(objectMapper.writeValueAsString(currency));
         } catch (RequiredFormFieldIsMissing e) {
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);//status 400
             out.print(objectMapper.writeValueAsString(new ErrorResponse(e.getMessage())));
         } catch (CurrencyAlreadyExists e) {
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
             resp.setStatus(HttpServletResponse.SC_CONFLICT);//status 409
             out.print(objectMapper.writeValueAsString(new ErrorResponse(e.getMessage())));
         }
