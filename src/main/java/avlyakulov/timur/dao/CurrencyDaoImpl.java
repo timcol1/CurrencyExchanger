@@ -24,8 +24,9 @@ public class CurrencyDaoImpl implements CurrencyDao {
     }
 
     @Override
-    public Optional<List<Currency>> findAll() {
-        final String findAllQuery = "SELECT * FROM Currencies";
+    public List<Currency> findAll() {
+        final String findAllQuery = "Select * From Currencies";
+
         List<Currency> currencies = new ArrayList<>();
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(findAllQuery)) {
@@ -33,22 +34,48 @@ public class CurrencyDaoImpl implements CurrencyDao {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Currency currency = new Currency(
-                        Integer.parseInt(resultSet.getString("ID")),
+                        resultSet.getInt("ID"),
                         resultSet.getString("Code"),
                         resultSet.getString("FullName"),
                         resultSet.getString("Sign")
                 );
                 currencies.add(currency);
             }
-            return Optional.of(currencies);
+            return currencies;
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Optional<Currency> findById(Integer id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Currency> findCurrencyByCode(String code) {
+        String findByCodeQuery = "Select * From Currencies Where Code = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(findByCodeQuery)) {
+            preparedStatement.setString(1, code);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Currency currency = new Currency(
+                        resultSet.getInt("ID"),
+                        resultSet.getString("Code"),
+                        resultSet.getString("FullName"),
+                        resultSet.getString("Sign")
+                );
+                return Optional.of(currency);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return Optional.empty();
     }
 
     @Override
-    public Optional<Currency> findById(Integer id) {
+    public Optional<Currency> create(Currency currency) {
         return Optional.empty();
     }
 
@@ -59,11 +86,6 @@ public class CurrencyDaoImpl implements CurrencyDao {
 
     @Override
     public Optional<Currency> update(Integer id, Currency currency) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Currency> findByCode(String code) {
         return Optional.empty();
     }
 }
