@@ -1,7 +1,7 @@
 package avlyakulov.timur.service;
 
-import avlyakulov.timur.dao.CurrencyDao;
-import avlyakulov.timur.dao.PoolConnectionBuilder;
+import avlyakulov.timur.dao.CurrencyDaoImpl;
+import avlyakulov.timur.connection.PoolConnectionBuilder;
 import avlyakulov.timur.model.Currency;
 
 import java.util.List;
@@ -9,14 +9,14 @@ import java.util.Optional;
 
 public class CurrencyService {
 
-    CurrencyDao currencyDao = new CurrencyDao();
+    CurrencyDaoImpl currencyDaoImpl = new CurrencyDaoImpl();
 
     public CurrencyService() {
-        currencyDao.setConnectionBuilder(new PoolConnectionBuilder());
+        currencyDaoImpl.setConnectionBuilder(new PoolConnectionBuilder());
     }
 
     public List<Currency> findAll() {
-        Optional<List<Currency>> currencyList = currencyDao.findAll();
+        Optional<List<Currency>> currencyList = currencyDaoImpl.findAll();
         if (currencyList.isEmpty()) {
             throw new RuntimeException("Something went wrong");
         } else {

@@ -1,4 +1,4 @@
-package avlyakulov.timur.dao;
+package avlyakulov.timur.connection;
 
 import java.sql.Connection;
 import java.sql.SQLException;

@@ -1,4 +1,4 @@
-package avlyakulov.timur.dao;
+package avlyakulov.timur.connection;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
