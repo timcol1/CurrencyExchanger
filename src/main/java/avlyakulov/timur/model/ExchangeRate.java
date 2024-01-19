@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @AllArgsConstructor
 @Getter
 @Setter
@@ -16,9 +18,9 @@ public class ExchangeRate {
 
     private Currency targetCurrency;
 
-    private double rate;
+    private BigDecimal rate;
 
-    public ExchangeRate(Currency baseCurrency, Currency targetCurrency, double rate) {
+    public ExchangeRate(Currency baseCurrency, Currency targetCurrency, BigDecimal rate) {
         this.baseCurrency = baseCurrency;
         this.targetCurrency = targetCurrency;
         this.rate = rate;

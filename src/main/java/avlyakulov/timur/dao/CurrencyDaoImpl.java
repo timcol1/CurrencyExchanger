@@ -48,11 +48,6 @@ public class CurrencyDaoImpl implements CurrencyDao {
     }
 
     @Override
-    public Optional<Currency> findById(Integer id) {
-        return Optional.empty();
-    }
-
-    @Override
     public Optional<Currency> findCurrencyByCode(String code) {
         String findByCodeQuery = "Select * From Currencies Where Code = ?;";
         try (Connection connection = getConnection();
@@ -90,15 +85,5 @@ public class CurrencyDaoImpl implements CurrencyDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public void delete(Integer id) {
-
-    }
-
-    @Override
-    public Optional<Currency> update(Integer id, Currency currency) {
-        return Optional.empty();
     }
 }

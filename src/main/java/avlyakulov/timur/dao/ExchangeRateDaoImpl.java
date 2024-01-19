@@ -16,6 +16,7 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
 
     private ConnectionBuilder connectionBuilder;
 
+    @Override
     public void setConnectionBuilder(ConnectionBuilder connectionBuilder) {
         this.connectionBuilder = connectionBuilder;
     }
@@ -44,13 +45,25 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
         List<ExchangeRate> exchangeRates = new ArrayList<>();
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(findAllQuery)) {
-
+            Currency baseCurrency = new Currency();
+            Currency targetCurrency = new Currency();
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
+                baseCurrency.setId(resultSet.getInt(2));
+                baseCurrency.setCode(resultSet.getString(3));
+                baseCurrency.setFullName(resultSet.getString(4));
+                baseCurrency.setSign(resultSet.getString(5));
+
+                targetCurrency.setId(resultSet.getInt(6));
+                targetCurrency.setCode(resultSet.getString(7));
+                targetCurrency.setFullName(resultSet.getString(8));
+                targetCurrency.setSign(resultSet.getString(9));
+
                 ExchangeRate currency = new ExchangeRate(
-                        new Currency(),
-                        new Currency(),
-                        double rate;
+                        resultSet.getInt(1),
+                        baseCurrency,
+                        targetCurrency,
+                        resultSet.getBigDecimal(10)
                 );
                 exchangeRates.add(currency);
             }
@@ -58,21 +71,6 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public Optional<ExchangeRate> findById(Integer id) {
-        return Optional.empty();
-    }
-
-    @Override
-    public void delete(Integer id) {
-
-    }
-
-    @Override
-    public Optional<ExchangeRate> update(Integer id, ExchangeRate exchangeRate) {
-        return Optional.empty();
     }
 
     @Override

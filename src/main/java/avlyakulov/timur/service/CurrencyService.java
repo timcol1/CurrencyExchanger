@@ -4,6 +4,7 @@ import avlyakulov.timur.custom_exception.BadCurrencyCodeException;
 import avlyakulov.timur.custom_exception.CurrencyAlreadyExists;
 import avlyakulov.timur.custom_exception.CurrencyNotFoundException;
 import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissing;
+import avlyakulov.timur.dao.CurrencyDao;
 import avlyakulov.timur.dao.CurrencyDaoImpl;
 import avlyakulov.timur.connection.PoolConnectionBuilder;
 import avlyakulov.timur.model.Currency;
@@ -13,14 +14,14 @@ import java.util.Optional;
 
 public class CurrencyService {
 
-    CurrencyDaoImpl currencyDaoImpl = new CurrencyDaoImpl();
+    CurrencyDao currencyDao = new CurrencyDaoImpl();
 
     public CurrencyService() {
-        currencyDaoImpl.setConnectionBuilder(new PoolConnectionBuilder());
+        currencyDao.setConnectionBuilder(new PoolConnectionBuilder());
     }
 
     public List<Currency> findAll() {
-        return currencyDaoImpl.findAll();
+        return currencyDao.findAll();
     }
 
     public Currency findByCode(String code) throws CurrencyNotFoundException, BadCurrencyCodeException {
@@ -28,7 +29,7 @@ public class CurrencyService {
             throw new BadCurrencyCodeException("Currency code is missing at address or you put wrong code");
         } else {
             code = code.substring(1);
-            Optional<Currency> currency = currencyDaoImpl.findCurrencyByCode(code);
+            Optional<Currency> currency = currencyDao.findCurrencyByCode(code);
             if (currency.isEmpty()) {
                 throw new CurrencyNotFoundException("Currency with this code " + code + " wasn't found");
             } else {
@@ -43,7 +44,7 @@ public class CurrencyService {
             if (currency.isPresent()) {
                 throw new CurrencyAlreadyExists("Currency with such code " + code + " is already exists");
             } else {
-                return currencyDaoImpl.create(new Currency(code, fullName, sign));
+                return currencyDao.create(new Currency(code, fullName, sign));
             }
         } else {
             throw new RequiredFormFieldIsMissing("A required field in currency is missing");
@@ -51,7 +52,7 @@ public class CurrencyService {
     }
 
     private Optional<Currency> findSimpleByCode(String code) {
-        return currencyDaoImpl.findCurrencyByCode(code);
+        return currencyDao.findCurrencyByCode(code);
     }
 
     private boolean checkValidityOfParameters(String... parameters) {
