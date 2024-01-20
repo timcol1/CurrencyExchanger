@@ -1,4 +1,4 @@
-package avlyakulov.timur.servlets;
+package avlyakulov.timur.servlets.currency;
 
 import avlyakulov.timur.custom_exception.CurrencyAlreadyExists;
 import avlyakulov.timur.custom_exception.ErrorResponse;
@@ -11,19 +11,29 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
 @WebServlet(urlPatterns = "/currencies")
+@Slf4j
 public class CurrenciesServlet extends HttpServlet {
+
 
     private final CurrencyService currencyService = new CurrencyService();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
+    public void init() throws ServletException {
+        log.info("Currencies servlet was created");
+    }
+
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        log.info("We are getting all currencies");
         List<Currency> currencies = currencyService.findAll();
         PrintWriter out = resp.getWriter();
         resp.setStatus(HttpServletResponse.SC_OK);//status 200

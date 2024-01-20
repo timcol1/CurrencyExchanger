@@ -1,4 +1,4 @@
-package avlyakulov.timur.servlets;
+package avlyakulov.timur.servlets.exchange;
 
 
 import avlyakulov.timur.model.ExchangeRate;

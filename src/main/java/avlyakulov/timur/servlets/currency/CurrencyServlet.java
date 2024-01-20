@@ -1,4 +1,4 @@
-package avlyakulov.timur.servlets;
+package avlyakulov.timur.servlets.currency;
 
 import avlyakulov.timur.custom_exception.BadCurrencyCodeException;
 import avlyakulov.timur.custom_exception.CurrencyNotFoundException;
