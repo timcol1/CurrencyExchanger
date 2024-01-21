@@ -17,7 +17,7 @@ public class EncodingFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        log.info("Encoding filter is setting properties");
+        log.info("Encoding filter is setting properties for servlet");
         servletResponse.setCharacterEncoding("UTF-8");
         servletRequest.setCharacterEncoding("UTF-8");
         servletResponse.setContentType("application/json");
@@ -27,6 +27,6 @@ public class EncodingFilter implements Filter {
 
     @Override
     public void destroy() {
-
+        log.info("Encoding filter was destroyed");
     }
 }

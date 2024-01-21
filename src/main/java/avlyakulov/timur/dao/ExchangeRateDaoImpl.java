@@ -3,6 +3,7 @@ package avlyakulov.timur.dao;
 import avlyakulov.timur.connection.ConnectionBuilder;
 import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.model.ExchangeRate;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 public class ExchangeRateDaoImpl implements ExchangeRateDao {
 
     private ConnectionBuilder connectionBuilder;
@@ -69,6 +71,7 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
             }
             return exchangeRates;
         } catch (SQLException e) {
+            log.error("Error with db");
             throw new RuntimeException(e);
         }
     }

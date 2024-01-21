@@ -47,16 +47,25 @@ public class CurrenciesServlet extends HttpServlet {
         String fullName = req.getParameter("fullName");
         String sign = req.getParameter("sign");
         PrintWriter out = resp.getWriter();
+        log.info("We got a request to create currency with such parameters code {}, fullName {}, sign {}", code, fullName, sign);
         try {
             Currency currency = currencyService.createCurrency(code, fullName, sign);
+            log.info("Currency with such parameters was created");
             resp.setStatus(HttpServletResponse.SC_OK);//status 200
             out.print(objectMapper.writeValueAsString(currency));
         } catch (RequiredFormFieldIsMissing e) {
+            log.error("One field of required fields is missing");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);//status 400
             out.print(objectMapper.writeValueAsString(new ErrorResponse(e.getMessage())));
         } catch (CurrencyAlreadyExists e) {
+            log.error("The currency with such parameters is already exists");
             resp.setStatus(HttpServletResponse.SC_CONFLICT);//status 409
             out.print(objectMapper.writeValueAsString(new ErrorResponse(e.getMessage())));
         }
+    }
+
+    @Override
+    public void destroy() {
+        log.info("Currencies servlet was destroyed");
     }
 }
