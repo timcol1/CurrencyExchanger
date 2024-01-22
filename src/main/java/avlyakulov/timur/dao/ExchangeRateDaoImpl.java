@@ -11,7 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 public class ExchangeRateDaoImpl implements ExchangeRateDao {
@@ -47,20 +46,23 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
         List<ExchangeRate> exchangeRates = new ArrayList<>();
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(findAllQuery)) {
-            Currency baseCurrency = new Currency();
-            Currency targetCurrency = new Currency();
+            Currency baseCurrency;
+            Currency targetCurrency;
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                baseCurrency.setId(resultSet.getInt(2));
-                baseCurrency.setCode(resultSet.getString(3));
-                baseCurrency.setFullName(resultSet.getString(4));
-                baseCurrency.setSign(resultSet.getString(5));
+                baseCurrency = new Currency(
+                        resultSet.getInt(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5)
+                );
 
-                targetCurrency.setId(resultSet.getInt(6));
-                targetCurrency.setCode(resultSet.getString(7));
-                targetCurrency.setFullName(resultSet.getString(8));
-                targetCurrency.setSign(resultSet.getString(9));
-
+                targetCurrency = new Currency(
+                        resultSet.getInt(6),
+                        resultSet.getString(7),
+                        resultSet.getString(8),
+                        resultSet.getString(9)
+                );
                 ExchangeRate currency = new ExchangeRate(
                         resultSet.getInt(1),
                         baseCurrency,

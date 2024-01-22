@@ -1,6 +1,8 @@
 package avlyakulov.timur.servlets.exchange;
 
 
+import avlyakulov.timur.dto.exchange.ExchangeRateResponse;
+import avlyakulov.timur.mapper.ExchangeRateMapper;
 import avlyakulov.timur.model.ExchangeRate;
 import avlyakulov.timur.service.ExchangeRateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,14 +23,15 @@ public class ExchangeRateServlet extends HttpServlet {
 
     private final ExchangeRateService exchangeRateService = new ExchangeRateService();
     private final ObjectMapper objectMapper = new ObjectMapper();
+    ExchangeRateMapper exchangeRateMapper = new ExchangeRateMapper();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info("We are getting all exchange rates");
-        List<ExchangeRate> exchangeRates = exchangeRateService.findAll();
+        List<ExchangeRateResponse> exchangeRateResponses = exchangeRateService.findAll().stream().map(exchangeRateMapper::mapToResponse).toList();
         PrintWriter out = resp.getWriter();
         resp.setStatus(HttpServletResponse.SC_OK);//status 200
-        out.print(objectMapper.writeValueAsString(exchangeRates));
+        out.print(objectMapper.writeValueAsString(exchangeRateResponses));
         out.flush();
     }
 
