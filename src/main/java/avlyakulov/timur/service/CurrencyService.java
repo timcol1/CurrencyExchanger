@@ -38,13 +38,13 @@ public class CurrencyService {
         }
     }
 
-    public Currency createCurrency(String code, String fullName, String sign) throws RequiredFormFieldIsMissing, CurrencyAlreadyExists {
-        if (checkValidityOfParameters(code, fullName, sign)) {
-            Optional<Currency> currency = findSimpleByCode(code);
-            if (currency.isPresent()) {
-                throw new CurrencyAlreadyExists("Currency with such code " + code + " is already exists");
+    public Currency createCurrency(Currency currency) throws RequiredFormFieldIsMissing, CurrencyAlreadyExists {
+        if (checkValidityOfParameters(currency.getCode(), currency.getFullName(), currency.getSign())) {
+            Optional<Currency> currencyOptional = findSimpleByCode(currency.getCode());
+            if (currencyOptional.isPresent()) {
+                throw new CurrencyAlreadyExists("Currency with such code " + currency.getCode() + " is already exists");
             } else {
-                return currencyDao.create(new Currency(code, fullName, sign));
+                return currencyDao.create(currency);
             }
         } else {
             throw new RequiredFormFieldIsMissing("A required field in currency is missing");

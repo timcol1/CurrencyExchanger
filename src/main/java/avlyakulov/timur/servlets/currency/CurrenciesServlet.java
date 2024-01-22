@@ -3,6 +3,9 @@ package avlyakulov.timur.servlets.currency;
 import avlyakulov.timur.custom_exception.CurrencyAlreadyExists;
 import avlyakulov.timur.custom_exception.ErrorResponse;
 import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissing;
+import avlyakulov.timur.dto.currency.CurrencyRequest;
+import avlyakulov.timur.dto.currency.CurrencyResponse;
+import avlyakulov.timur.mapper.CurrencyMapper;
 import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.service.CurrencyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,6 +28,7 @@ public class CurrenciesServlet extends HttpServlet {
 
     private final CurrencyService currencyService = new CurrencyService();
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final CurrencyMapper currencyMapper = new CurrencyMapper();
 
     @Override
     public void init() throws ServletException {
@@ -34,7 +38,7 @@ public class CurrenciesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info("We are getting all currencies");
-        List<Currency> currencies = currencyService.findAll();
+        List<CurrencyResponse> currencies = currencyService.findAll().stream().map(currencyMapper::mapToResponse).toList();
         PrintWriter out = resp.getWriter();
         resp.setStatus(HttpServletResponse.SC_OK);//status 200
         out.print(objectMapper.writeValueAsString(currencies));
@@ -46,10 +50,11 @@ public class CurrenciesServlet extends HttpServlet {
         String code = req.getParameter("code").toUpperCase();
         String fullName = req.getParameter("fullName");
         String sign = req.getParameter("sign");
+        Currency currency = currencyMapper.mapToEntity(new CurrencyRequest(code, fullName, sign));
         PrintWriter out = resp.getWriter();
         log.info("We got a request to create currency with such parameters code {}, fullName {}, sign {}", code, fullName, sign);
         try {
-            Currency currency = currencyService.createCurrency(code, fullName, sign);
+            currency = currencyService.createCurrency(currency);
             log.info("Currency with such parameters was created");
             resp.setStatus(HttpServletResponse.SC_OK);//status 200
             out.print(objectMapper.writeValueAsString(currency));

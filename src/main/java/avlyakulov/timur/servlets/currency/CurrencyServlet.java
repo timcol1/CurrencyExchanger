@@ -3,6 +3,8 @@ package avlyakulov.timur.servlets.currency;
 import avlyakulov.timur.custom_exception.BadCurrencyCodeException;
 import avlyakulov.timur.custom_exception.CurrencyNotFoundException;
 import avlyakulov.timur.custom_exception.ErrorResponse;
+import avlyakulov.timur.dto.currency.CurrencyResponse;
+import avlyakulov.timur.mapper.CurrencyMapper;
 import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.service.CurrencyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +26,7 @@ public class CurrencyServlet extends HttpServlet {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final String generalUrl = "http://localhost:8080/currency";
     private final int lengthUrl = generalUrl.length();
+    private final CurrencyMapper currencyMapper = new CurrencyMapper();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -32,9 +35,9 @@ public class CurrencyServlet extends HttpServlet {
         String currencyCode = url.substring(lengthUrl);
         log.info("We got a request to find a currency with such code {}", currencyCode);
         try {
-            Currency currency = currencyService.findByCode(currencyCode);
+            CurrencyResponse currencyResponse = currencyMapper.mapToResponse(currencyService.findByCode(currencyCode));
             resp.setStatus(HttpServletResponse.SC_OK);
-            out.print(objectMapper.writeValueAsString(currency));
+            out.print(objectMapper.writeValueAsString(currencyResponse));
         } catch (BadCurrencyCodeException e) {
             log.error("This code was written by user is wrong");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);//status 400
@@ -44,10 +47,5 @@ public class CurrencyServlet extends HttpServlet {
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);//status 404
             out.print(objectMapper.writeValueAsString(new ErrorResponse(e.getMessage())));
         }
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
     }
 }
