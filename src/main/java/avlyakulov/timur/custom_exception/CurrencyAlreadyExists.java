@@ -1,6 +1,6 @@
 package avlyakulov.timur.custom_exception;
 
-public class CurrencyAlreadyExists extends Exception {
+public class CurrencyAlreadyExists extends RuntimeException {
     public CurrencyAlreadyExists() {
         super();
     }

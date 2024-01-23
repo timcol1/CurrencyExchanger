@@ -34,18 +34,8 @@ public class CurrencyServlet extends HttpServlet {
         String url = req.getRequestURL().toString();
         String currencyCode = url.substring(lengthUrl);
         log.info("We got a request to find a currency with such code {}", currencyCode);
-        try {
-            CurrencyResponse currencyResponse = currencyMapper.mapToResponse(currencyService.findByCode(currencyCode));
-            resp.setStatus(HttpServletResponse.SC_OK);
-            out.print(objectMapper.writeValueAsString(currencyResponse));
-        } catch (BadCurrencyCodeException e) {
-            log.error("This code was written by user is wrong");
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);//status 400
-            out.print(objectMapper.writeValueAsString(new ErrorResponse(e.getMessage())));
-        } catch (CurrencyNotFoundException e) {
-            log.error("The currency with such code {} wasn't found", currencyCode);
-            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);//status 404
-            out.print(objectMapper.writeValueAsString(new ErrorResponse(e.getMessage())));
-        }
+        CurrencyResponse currencyResponse = currencyMapper.mapToResponse(currencyService.findByCode(currencyCode));
+        resp.setStatus(HttpServletResponse.SC_OK);
+        out.print(objectMapper.writeValueAsString(currencyResponse));
     }
 }

@@ -1,4 +1,4 @@
-package avlyakulov.timur.servlets;
+package avlyakulov.timur.filter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
@@ -21,7 +21,6 @@ public class EncodingFilter implements Filter {
         servletResponse.setCharacterEncoding("UTF-8");
         servletRequest.setCharacterEncoding("UTF-8");
         servletResponse.setContentType("application/json");
-
         filterChain.doFilter(servletRequest, servletResponse);
     }
 

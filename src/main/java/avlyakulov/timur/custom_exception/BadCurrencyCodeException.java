@@ -1,6 +1,6 @@
 package avlyakulov.timur.custom_exception;
 
-public class BadCurrencyCodeException extends Exception {
+public class BadCurrencyCodeException extends RuntimeException {
     public BadCurrencyCodeException() {
         super();
     }

@@ -1,6 +1,6 @@
 package avlyakulov.timur.custom_exception;
 
-public class RequiredFormFieldIsMissing extends Exception {
+public class RequiredFormFieldIsMissing extends RuntimeException {
     public RequiredFormFieldIsMissing() {
     }
 

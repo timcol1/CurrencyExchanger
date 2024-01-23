@@ -46,7 +46,7 @@ public class CurrenciesServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException  {
         String code = req.getParameter("code").toUpperCase();
         String fullName = req.getParameter("fullName");
         String sign = req.getParameter("sign");
@@ -67,6 +67,7 @@ public class CurrenciesServlet extends HttpServlet {
             resp.setStatus(HttpServletResponse.SC_CONFLICT);//status 409
             out.print(objectMapper.writeValueAsString(new ErrorResponse(e.getMessage())));
         }
+        out.flush();
     }
 
     @Override
