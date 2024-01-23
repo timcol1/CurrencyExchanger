@@ -1,9 +1,9 @@
 package avlyakulov.timur.service;
 
 import avlyakulov.timur.custom_exception.BadCurrencyCodeException;
-import avlyakulov.timur.custom_exception.CurrencyAlreadyExists;
+import avlyakulov.timur.custom_exception.CurrencyAlreadyExistsException;
 import avlyakulov.timur.custom_exception.CurrencyNotFoundException;
-import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissing;
+import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissingException;
 import avlyakulov.timur.dao.CurrencyDao;
 import avlyakulov.timur.dao.CurrencyDaoImpl;
 import avlyakulov.timur.connection.PoolConnectionBuilder;
@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class CurrencyService {
+    private final int CODE_LENGTH_URL = 3;
 
     CurrencyDao currencyDao = new CurrencyDaoImpl();
 
@@ -24,11 +25,10 @@ public class CurrencyService {
         return currencyDao.findAll();
     }
 
-    public Currency findByCode(String code) throws CurrencyNotFoundException, BadCurrencyCodeException {
-        if (code.length() != 4) {
+    public Currency findByCode(String code) {
+        if (code.length() != CODE_LENGTH_URL) {
             throw new BadCurrencyCodeException("Currency code is missing at address or you put wrong code");
         } else {
-            code = code.substring(1);
             Optional<Currency> currency = currencyDao.findCurrencyByCode(code);
             if (currency.isEmpty()) {
                 throw new CurrencyNotFoundException("Currency with this code " + code + " wasn't found");
@@ -38,16 +38,16 @@ public class CurrencyService {
         }
     }
 
-    public Currency createCurrency(Currency currency) throws RequiredFormFieldIsMissing, CurrencyAlreadyExists {
+    public Currency createCurrency(Currency currency) {
         if (checkValidityOfParameters(currency.getCode(), currency.getFullName(), currency.getSign())) {
             Optional<Currency> currencyOptional = findSimpleByCode(currency.getCode());
             if (currencyOptional.isPresent()) {
-                throw new CurrencyAlreadyExists("Currency with such code " + currency.getCode() + " is already exists");
+                throw new CurrencyAlreadyExistsException("Currency with such code " + currency.getCode() + " is already exists");
             } else {
                 return currencyDao.create(currency);
             }
         } else {
-            throw new RequiredFormFieldIsMissing("A required field in currency is missing");
+            throw new RequiredFormFieldIsMissingException("A required field in currency is missing");
         }
     }
 
