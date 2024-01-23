@@ -57,7 +57,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
              PreparedStatement preparedStatement = connection.prepareStatement(findByCodeQuery)) {
             preparedStatement.setString(1, code);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
+            if (resultSet.next()) {
                 Currency currency = new Currency(
                         resultSet.getInt("ID"),
                         resultSet.getString("Code"),
