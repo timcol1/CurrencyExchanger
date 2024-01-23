@@ -46,27 +46,23 @@ public class CurrenciesServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException  {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String code = req.getParameter("code").toUpperCase();
         String fullName = req.getParameter("fullName");
         String sign = req.getParameter("sign");
-        Currency currency = currencyMapper.mapToEntity(new CurrencyRequest(code, fullName, sign));
-        PrintWriter out = resp.getWriter();
+
         log.info("We got a request to create currency with such parameters code {}, fullName {}, sign {}", code, fullName, sign);
-        try {
-            currency = currencyService.createCurrency(currency);
-            log.info("Currency with such parameters was created");
-            resp.setStatus(HttpServletResponse.SC_OK);//status 200
-            out.print(objectMapper.writeValueAsString(currency));
-        } catch (RequiredFormFieldIsMissing e) {
-            log.error("One field of required fields is missing");
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);//status 400
-            out.print(objectMapper.writeValueAsString(new ErrorResponse(e.getMessage())));
-        } catch (CurrencyAlreadyExists e) {
-            log.error("The currency with such parameters is already exists");
-            resp.setStatus(HttpServletResponse.SC_CONFLICT);//status 409
-            out.print(objectMapper.writeValueAsString(new ErrorResponse(e.getMessage())));
-        }
+
+        Currency currency = currencyMapper.mapToEntity(new CurrencyRequest(code, fullName, sign));
+
+        PrintWriter out = resp.getWriter();
+
+        currency = currencyService.createCurrency(currency);
+
+        log.info("Currency with such parameters was created");
+
+        resp.setStatus(HttpServletResponse.SC_OK);//status 200
+        out.print(objectMapper.writeValueAsString(currency));
         out.flush();
     }
 

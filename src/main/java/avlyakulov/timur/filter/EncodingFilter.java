@@ -7,8 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
-@WebFilter(urlPatterns = "/*")
+
 @Slf4j
+@WebFilter(urlPatterns = "/*")
 public class EncodingFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
