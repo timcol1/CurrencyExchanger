@@ -1,8 +1,5 @@
 package avlyakulov.timur.servlets.currency;
 
-import avlyakulov.timur.custom_exception.CurrencyAlreadyExists;
-import avlyakulov.timur.custom_exception.ErrorResponse;
-import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissing;
 import avlyakulov.timur.dto.currency.CurrencyRequest;
 import avlyakulov.timur.dto.currency.CurrencyResponse;
 import avlyakulov.timur.mapper.CurrencyMapper;
@@ -15,7 +12,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-
 
 import java.io.IOException;
 import java.io.PrintWriter;

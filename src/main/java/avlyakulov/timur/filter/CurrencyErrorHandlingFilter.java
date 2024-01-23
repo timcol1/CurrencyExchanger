@@ -25,7 +25,7 @@ public class CurrencyErrorHandlingFilter implements Filter {
         try {
             filterChain.doFilter(servletRequest, servletResponse);
         } catch (BadCurrencyCodeException e) {
-            log.error("This code was written by user is wrong");
+            log.error("This code that was written by user is wrong");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);//status 400
             out.print(objectMapper.writeValueAsString(new ErrorResponse(e.getMessage())));
         } catch (CurrencyNotFoundException e) {
