@@ -132,6 +132,24 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
 
     @Override
     public ExchangeRate create(ExchangeRate exchangeRate) {
-        return null;
+        final String createExchangeRateByPairCodeAndRate = "INSERT INTO ExchangeRates(BaseCurrencyId, TargetCurrencyId, Rate)\n" +
+                "values ((SELECT ID FROM Currencies WHERE Code = ?),\n" +
+                "        (SELECT ID FROM Currencies WHERE Code = ?),\n" +
+                "        ?)";
+
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(createExchangeRateByPairCodeAndRate)) {
+
+            preparedStatement.setString(1, exchangeRate.getBaseCurrency().getCode());
+            preparedStatement.setString(2, exchangeRate.getTargetCurrency().getCode());
+            preparedStatement.setBigDecimal(3, exchangeRate.getRate());
+
+            preparedStatement.executeUpdate();
+
+            return findByCodes(exchangeRate.getBaseCurrency().getCode(), exchangeRate.getTargetCurrency().getCode()).get();
+        } catch (SQLException e) {
+            log.error("Error with db");
+            throw new RuntimeException(e);
+        }
     }
 }

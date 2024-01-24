@@ -1,22 +1,28 @@
 package avlyakulov.timur.service;
 
 import avlyakulov.timur.connection.PoolConnectionBuilder;
-import avlyakulov.timur.custom_exception.ExchangeRateCurrencyCodePairException;
-import avlyakulov.timur.custom_exception.ExchangeRateCurrencyPairNotFoundException;
+import avlyakulov.timur.custom_exception.*;
+import avlyakulov.timur.dao.CurrencyDao;
+import avlyakulov.timur.dao.CurrencyDaoImpl;
 import avlyakulov.timur.dao.ExchangeRateDao;
 import avlyakulov.timur.dao.ExchangeRateDaoImpl;
+import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.model.ExchangeRate;
 
 import java.util.List;
 import java.util.Optional;
+
 
 public class ExchangeRateService {
     private final int CURRENCY_PAIR_CODE_LENGTH_URL = 6;
 
     ExchangeRateDao exchangeRateDao = new ExchangeRateDaoImpl();
 
+    CurrencyDao currencyDao = new CurrencyDaoImpl();
+
     public ExchangeRateService() {
         exchangeRateDao.setConnectionBuilder(new PoolConnectionBuilder());
+        currencyDao.setConnectionBuilder(new PoolConnectionBuilder());
     }
 
     public List<ExchangeRate> findAll() {
@@ -37,6 +43,30 @@ public class ExchangeRateService {
                 throw new ExchangeRateCurrencyPairNotFoundException("The exchange rate with such code pair " + currencyPairCode + " doesn't exist");
             }
         }
+    }
+
+    public ExchangeRate create(ExchangeRate exchangeRate) {
+
+        String baseCurrencyCode = exchangeRate.getBaseCurrency().getCode();
+        String targetCurrencyCode = exchangeRate.getTargetCurrency().getCode();
+
+        if (checkExistenceOfCurrencyPair(exchangeRateDao.findByCodes(baseCurrencyCode, targetCurrencyCode))) {
+            Optional<Currency> baseCurrency = currencyDao.findCurrencyByCode(baseCurrencyCode);
+            Optional<Currency> targetCurrency = currencyDao.findCurrencyByCode(targetCurrencyCode);
+
+            if (baseCurrency.isPresent() && targetCurrency.isPresent()) {
+                return exchangeRateDao.create(exchangeRate);
+            } else {
+                throw new CurrencyNotFoundException("One (or both) currencies from the currency pair does not exist in the database");
+            }
+        } else {
+            throw new ExchangeRateAlreadyExistsException("A currency pair with this code pair already exists");
+        }
+    }
+
+
+    private boolean checkExistenceOfCurrencyPair(Optional<ExchangeRate> exchangeRate) {
+        return exchangeRate.isEmpty();
     }
 
 }
