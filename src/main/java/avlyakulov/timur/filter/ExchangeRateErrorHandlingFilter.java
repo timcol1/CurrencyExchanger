@@ -30,7 +30,10 @@ public class ExchangeRateErrorHandlingFilter implements Filter {
             log.error("The currency pair with such code wasn't found");
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);//status 404
             out.print(objectMapper.writeValueAsString(new ErrorResponse(e.getMessage())));
+        } catch (ExchangeRateAlreadyExistsException e) {
+            log.error("The exchange rate with such code pair is already exists");
+            resp.setStatus(HttpServletResponse.SC_CONFLICT);//status 409
+            out.print(objectMapper.writeValueAsString(new ErrorResponse(e.getMessage())));
         }
-
     }
 }

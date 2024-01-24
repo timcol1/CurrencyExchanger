@@ -43,7 +43,7 @@ public class CurrenciesServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String code = req.getParameter("code").toUpperCase();
+        String code = req.getParameter("code");
         String fullName = req.getParameter("fullName");
         String sign = req.getParameter("sign");
 

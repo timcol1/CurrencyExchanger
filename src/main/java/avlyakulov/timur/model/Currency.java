@@ -24,4 +24,7 @@ public class Currency {
         this.sign = sign;
     }
 
+    public Currency(String code) {
+        this.code = code;
+    }
 }
