@@ -6,6 +6,7 @@ import avlyakulov.timur.model.Exchange;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,19 +47,17 @@ public class ExchangeDaoImpl implements ExchangeDao {
             preparedStatement.setString(2, targetCurrencyCode);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            Exchange exchange;
-
             if (resultSet.next()) {
-                return getExchangeFromResultSet(resultSet, amount);
+                return getExchangeFromResultSetAB(resultSet, amount);//AB
             } else {
                 preparedStatement.setString(1, targetCurrencyCode);
                 preparedStatement.setString(2, baseCurrencyCode);
                 resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
-                    return getExchangeFromResultSet(resultSet, amount);
+                    return getExchangeFromResultSetBA(resultSet, amount);//BA
+
                 } else {
                     return null;
-
                 }
             }
         } catch (SQLException e) {
@@ -67,7 +66,7 @@ public class ExchangeDaoImpl implements ExchangeDao {
         }
     }
 
-    public Exchange getExchangeFromResultSet(ResultSet resultSet, BigDecimal amount) throws SQLException {
+    public Exchange getExchangeFromResultSetAB(ResultSet resultSet, BigDecimal amount) throws SQLException {
         Currency baseCurrency = new Currency(
                 resultSet.getInt("BaseCurrencyId"),
                 resultSet.getString("BaseCurrencyCode"),
@@ -81,6 +80,30 @@ public class ExchangeDaoImpl implements ExchangeDao {
                 resultSet.getString("TargetCurrencySign")
         );
         BigDecimal rate = resultSet.getBigDecimal("Rate");
+        BigDecimal convertedAmount = rate.multiply(amount);
+        return new Exchange(
+                baseCurrency,
+                targetCurrency,
+                rate,
+                amount,
+                convertedAmount
+        );
+    }
+
+    public Exchange getExchangeFromResultSetBA(ResultSet resultSet, BigDecimal amount) throws SQLException {
+        Currency baseCurrency = new Currency(
+                resultSet.getInt("TargetCurrencyId"),
+                resultSet.getString("TargetCurrencyCode"),
+                resultSet.getString("TargetCurrencyFullName"),
+                resultSet.getString("TargetCurrencySign")
+        );
+        Currency targetCurrency = new Currency(
+                resultSet.getInt("BaseCurrencyId"),
+                resultSet.getString("BaseCurrencyCode"),
+                resultSet.getString("BaseCurrencyFullName"),
+                resultSet.getString("BaseCurrencySign")
+        );
+        BigDecimal rate = BigDecimal.ONE.divide(resultSet.getBigDecimal("Rate"), 3, RoundingMode.HALF_UP);
         BigDecimal convertedAmount = rate.multiply(amount);
         return new Exchange(
                 baseCurrency,
