@@ -29,11 +29,11 @@ public class ExchangeRateServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter out = resp.getWriter();
         String url = req.getRequestURL().toString();
-        String currencyPairCode = url.substring(lengthUrl);
-        log.info("We got a request to find a currency pair with such code {}", currencyPairCode);
         if (url.length() < generalUrl.length()) {
             throw new ExchangeRateCurrencyCodePairException("The currency codes of the pair are missing from the address or it is specified incorrectly");
         }
+        String currencyPairCode = url.substring(lengthUrl);
+        log.info("We got a request to find a currency pair with such code {}", currencyPairCode);
         ExchangeRateResponse exchangeRateResponse = exchangeRateMapper.mapToResponse(exchangeRateService.findByCodes(currencyPairCode));
         resp.setStatus(HttpServletResponse.SC_OK);
         out.print(objectMapper.writeValueAsString(exchangeRateResponse));
