@@ -1,5 +1,6 @@
 package avlyakulov.timur.servlets.currency;
 
+import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissingException;
 import avlyakulov.timur.dto.currency.CurrencyRequest;
 import avlyakulov.timur.dto.currency.CurrencyResponse;
 import avlyakulov.timur.mapper.CurrencyMapper;
@@ -49,17 +50,31 @@ public class CurrenciesServlet extends HttpServlet {
 
         log.info("We got a request to create currency with such parameters code {}, fullName {}, sign {}", code, fullName, sign);
 
-        Currency currency = currencyMapper.mapToEntity(new CurrencyRequest(code, fullName, sign));
+        if (checkValidityOfParameters(code, fullName, sign)) {
 
-        PrintWriter out = resp.getWriter();
+            Currency currency = currencyMapper.mapToEntity(new CurrencyRequest(code, fullName, sign));
 
-        currency = currencyService.createCurrency(currency);
+            PrintWriter out = resp.getWriter();
 
-        log.info("Currency with such parameters was created");
+            currency = currencyService.createCurrency(currency);
 
-        resp.setStatus(HttpServletResponse.SC_OK);//status 200
-        out.print(objectMapper.writeValueAsString(currency));
-        out.flush();
+            log.info("Currency with such parameters was created");
+
+            resp.setStatus(HttpServletResponse.SC_OK);//status 200
+            out.print(objectMapper.writeValueAsString(currency));
+            out.flush();
+        } else {
+            throw new RequiredFormFieldIsMissingException("A required field in currency is missing");
+        }
+    }
+
+    private boolean checkValidityOfParameters(String... parameters) {
+        for (String parameter : parameters) {
+            if (parameter == null || parameter.isBlank()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

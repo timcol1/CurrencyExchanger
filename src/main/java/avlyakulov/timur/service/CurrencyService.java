@@ -39,28 +39,15 @@ public class CurrencyService {
     }
 
     public Currency createCurrency(Currency currency) {
-        if (checkValidityOfParameters(currency.getCode(), currency.getFullName(), currency.getSign())) {
-            Optional<Currency> currencyOptional = findSimpleByCode(currency.getCode());
-            if (currencyOptional.isPresent()) {
-                throw new CurrencyAlreadyExistsException("Currency with such code " + currency.getCode() + " is already exists");
-            } else {
-                return currencyDao.create(currency);
-            }
+        Optional<Currency> currencyOptional = findSimpleByCode(currency.getCode());
+        if (currencyOptional.isPresent()) {
+            throw new CurrencyAlreadyExistsException("Currency with such code " + currency.getCode() + " is already exists");
         } else {
-            throw new RequiredFormFieldIsMissingException("A required field in currency is missing");
+            return currencyDao.create(currency);
         }
     }
 
     private Optional<Currency> findSimpleByCode(String code) {
         return currencyDao.findCurrencyByCode(code);
-    }
-
-    private boolean checkValidityOfParameters(String... parameters) {
-        for (String parameter : parameters) {
-            if (parameter == null || parameter.isBlank()) {
-                return false;
-            }
-        }
-        return true;
     }
 }
