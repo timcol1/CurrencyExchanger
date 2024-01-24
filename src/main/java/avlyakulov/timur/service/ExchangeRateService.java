@@ -34,7 +34,7 @@ public class ExchangeRateService {
             if (exchangeRate.isPresent()) {
                 return exchangeRate.get();
             } else {
-                throw new ExchangeRateCurrencyPairNotFoundException("The exchange rate with such code pair doesn't exist");
+                throw new ExchangeRateCurrencyPairNotFoundException("The exchange rate with such code pair " + currencyPairCode + " doesn't exist");
             }
         }
     }
