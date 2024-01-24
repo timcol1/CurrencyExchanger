@@ -9,6 +9,7 @@ import avlyakulov.timur.dao.ExchangeRateDaoImpl;
 import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.model.ExchangeRate;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +46,7 @@ public class ExchangeRateService {
         }
     }
 
-    public ExchangeRate create(ExchangeRate exchangeRate) {
+    public ExchangeRate createExchangeRate(ExchangeRate exchangeRate) {
 
         String baseCurrencyCode = exchangeRate.getBaseCurrency().getCode();
         String targetCurrencyCode = exchangeRate.getTargetCurrency().getCode();
@@ -67,6 +68,22 @@ public class ExchangeRateService {
 
     private boolean checkExistenceOfCurrencyPair(Optional<ExchangeRate> exchangeRate) {
         return exchangeRate.isEmpty();
+    }
+
+    public ExchangeRate updateExchangeRate(String currencyPairCode, BigDecimal updatedRate) {
+        if (currencyPairCode.length() != CURRENCY_PAIR_CODE_LENGTH_URL) {
+            throw new ExchangeRateCurrencyCodePairException("The currency codes of the pair are missing from the address or it is specified incorrectly");
+        } else {
+            String baseCurrencyCode = currencyPairCode.substring(0, 3);
+            String targetCurrencyCode = currencyPairCode.substring(3);
+
+            Optional<ExchangeRate> exchangeRate = exchangeRateDao.findByCodes(baseCurrencyCode, targetCurrencyCode);
+            if (exchangeRate.isPresent()) {
+                return exchangeRateDao.update(baseCurrencyCode, targetCurrencyCode, updatedRate);
+            } else {
+                throw new ExchangeRateCurrencyPairNotFoundException("The exchange rate with such code pair " + currencyPairCode + " doesn't exist");
+            }
+        }
     }
 
 }

@@ -1,11 +1,9 @@
 package avlyakulov.timur.servlets.exchange;
 
 import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissingException;
-import avlyakulov.timur.dto.currency.CurrencyRequest;
 import avlyakulov.timur.dto.exchange.ExchangeRateRequest;
 import avlyakulov.timur.dto.exchange.ExchangeRateResponse;
 import avlyakulov.timur.mapper.ExchangeRateMapper;
-import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.model.ExchangeRate;
 import avlyakulov.timur.service.ExchangeRateService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,7 +48,7 @@ public class ExchangeRatesServlet extends HttpServlet {
         if (checkValidityOfParameters(baseCurrencyCode, targetCurrencyCode, rate)) {
             PrintWriter out = resp.getWriter();
             ExchangeRate exchangeRate = exchangeRateMapper.mapToEntity(new ExchangeRateRequest(baseCurrencyCode, targetCurrencyCode, new BigDecimal(rate)));
-            exchangeRate = exchangeRateService.create(exchangeRate);
+            exchangeRate = exchangeRateService.createExchangeRate(exchangeRate);
             log.info("Exchange pair with such parameters was created");
             resp.setStatus(HttpServletResponse.SC_OK);//status 200
             out.print(objectMapper.writeValueAsString(exchangeRate));

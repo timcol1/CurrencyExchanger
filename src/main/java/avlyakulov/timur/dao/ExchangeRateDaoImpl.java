@@ -5,6 +5,7 @@ import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.model.ExchangeRate;
 import lombok.extern.slf4j.Slf4j;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -147,6 +148,29 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
             preparedStatement.executeUpdate();
 
             return findByCodes(exchangeRate.getBaseCurrency().getCode(), exchangeRate.getTargetCurrency().getCode()).get();
+        } catch (SQLException e) {
+            log.error("Error with db");
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public ExchangeRate update(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate) {
+        final String updateRateQuery = "update ExchangeRates\n" +
+                "set rate = ?\n" +
+                "where BaseCurrencyId = (select ID from Currencies where code = ?) \n" +
+                "  and TargetCurrencyId = (select ID from Currencies where code = ?)";
+
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(updateRateQuery)) {
+
+            preparedStatement.setBigDecimal(1, rate);
+            preparedStatement.setString(2, baseCurrencyCode);
+            preparedStatement.setString(3, targetCurrencyCode);
+
+            preparedStatement.executeUpdate();
+
+            return findByCodes(baseCurrencyCode, targetCurrencyCode).get();
         } catch (SQLException e) {
             log.error("Error with db");
             throw new RuntimeException(e);
