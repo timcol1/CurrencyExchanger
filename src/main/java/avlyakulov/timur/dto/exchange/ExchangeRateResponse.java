@@ -1,7 +1,6 @@
 package avlyakulov.timur.dto.exchange;
 
 import avlyakulov.timur.dto.currency.CurrencyResponse;
-import avlyakulov.timur.model.Currency;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

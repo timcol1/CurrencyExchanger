@@ -1,6 +1,7 @@
 package avlyakulov.timur.dao;
 
 import avlyakulov.timur.connection.ConnectionBuilder;
+import avlyakulov.timur.custom_exception.ExchangeRateCurrencyPairNotFoundException;
 import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.model.Exchange;
 import lombok.extern.slf4j.Slf4j;
@@ -48,16 +49,17 @@ public class ExchangeDaoImpl implements ExchangeDao {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
+                log.info("completed the exchange AB");
                 return getExchangeFromResultSetAB(resultSet, amount);//AB
             } else {
                 preparedStatement.setString(1, targetCurrencyCode);
                 preparedStatement.setString(2, baseCurrencyCode);
                 resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
+                    log.info("completed the exchange BA");
                     return getExchangeFromResultSetBA(resultSet, amount);//BA
-
                 } else {
-                    return null;
+                    throw new ExchangeRateCurrencyPairNotFoundException("The exchange rate with such code pair wasn't found");
                 }
             }
         } catch (SQLException e) {
