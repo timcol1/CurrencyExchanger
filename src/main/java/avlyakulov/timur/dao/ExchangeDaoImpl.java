@@ -42,24 +42,38 @@ public class ExchangeDaoImpl implements ExchangeDao {
                 "         INNER JOIN Currencies AS tc ON er.TargetCurrencyId = tc.ID\n" +
                 "WHERE BaseCurrencyCode = ? AND TargetCurrencyCode = ?;";
 
+        String exchangeRateUSDA = "SELECT TargetCurrencyId AS ID, Code, FullName, Sign, Rate FROM ExchangeRates AS er INNER JOIN Currencies AS c ON er.TargetCurrencyId = c.ID\n" +
+                "WHERE BaseCurrencyId = (SELECT ID FROM Currencies WHERE Code = 'USD')\n" +
+                "  AND TargetCurrencyId = (SELECT ID FROM Currencies WHERE Code = ?);";
+        String exchangeRateUSDB = "SELECT TargetCurrencyId AS ID, Code, FullName, Sign, Rate FROM ExchangeRates AS er INNER JOIN Currencies AS c ON er.TargetCurrencyId = c.ID\n" +
+                "WHERE BaseCurrencyId = (SELECT ID FROM Currencies WHERE Code = 'USD')\n" +
+                "  AND TargetCurrencyId = (SELECT ID FROM Currencies WHERE Code = ?);";
+
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(exchangeQuery)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(exchangeQuery);
+             PreparedStatement preparedStatementUSDA = connection.prepareStatement(exchangeRateUSDA);
+             PreparedStatement preparedStatementUSDB = connection.prepareStatement(exchangeRateUSDB)) {
+
             preparedStatement.setString(1, baseCurrencyCode);
             preparedStatement.setString(2, targetCurrencyCode);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                log.info("completed the exchange AB");
+                log.info("Completed the exchange AB");
                 return getExchangeFromResultSetAB(resultSet, amount);//AB
             } else {
                 preparedStatement.setString(1, targetCurrencyCode);
                 preparedStatement.setString(2, baseCurrencyCode);
                 resultSet = preparedStatement.executeQuery();
                 if (resultSet.next()) {
-                    log.info("completed the exchange BA");
+                    log.info("Completed the exchange BA");
                     return getExchangeFromResultSetBA(resultSet, amount);//BA
                 } else {
-                    throw new ExchangeRateCurrencyPairNotFoundException("The exchange rate with such code pair wasn't found");
+                    preparedStatementUSDA.setString(1, baseCurrencyCode);
+                    preparedStatementUSDB.setString(1, targetCurrencyCode);
+                    ResultSet currencyA = preparedStatementUSDA.executeQuery();
+                    ResultSet currencyB = preparedStatementUSDB.executeQuery();
+                    return getExchangeFromResultSetUSDAB(currencyA, currencyB, amount);//USD-A and USD-B = AB
                 }
             }
         } catch (SQLException e) {
@@ -114,5 +128,37 @@ public class ExchangeDaoImpl implements ExchangeDao {
                 amount,
                 convertedAmount
         );
+    }
+
+    public Exchange getExchangeFromResultSetUSDAB(ResultSet currencyA, ResultSet currencyB, BigDecimal amount) throws SQLException {
+        if (currencyA.next() && currencyB.next()) {
+            log.info("Completed the exchange from USD-A and USD-B = AB");
+            Currency baseCurrency = new Currency(
+                    currencyA.getInt("ID"),
+                    currencyA.getString("Code"),
+                    currencyA.getString("FullName"),
+                    currencyA.getString("Sign")
+            );
+            Currency targetCurrency = new Currency(
+                    currencyB.getInt("ID"),
+                    currencyB.getString("Code"),
+                    currencyB.getString("FullName"),
+                    currencyB.getString("Sign")
+            );
+            BigDecimal rateUSDA = currencyA.getBigDecimal("Rate");
+            BigDecimal rateUSDB = currencyB.getBigDecimal("Rate");
+            BigDecimal rate = rateUSDB.divide(rateUSDA, 3, RoundingMode.HALF_UP);
+            BigDecimal convertedAmount = rate.multiply(amount);
+
+            return new Exchange(
+                    baseCurrency,
+                    targetCurrency,
+                    rate,
+                    amount,
+                    convertedAmount
+            );
+        } else {
+            throw new ExchangeRateCurrencyPairNotFoundException("The exchange rate with such code pair wasn't found");
+        }
     }
 }

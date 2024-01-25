@@ -1,0 +1,15 @@
+BA
+uah -> usd = 0,026
+usd -> uah = 37,81
+
+usd to uah = 1 / 0,026 = 37,81
+
+USD-A and USD-B = AB
+
+We want to get PLN to UAH
+
+USD-PLN = 4.02
+USD-UAH = 37.51
+
+PLN-UAH = 37.51 / 4.02 = 9.33
+UAH-PLN = 4.02 / 37.51 = 0.10
