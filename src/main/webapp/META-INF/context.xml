@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context>
-
+    <!--todo change url connect to db from strict to relative or with env variable-->
+    <!--url="jdbc:sqlite:C:/Users/Timur/IdeaProjects/CurrencyExchanger/sqlite/currencies.db"-->
     <Resource
             driverClassName="org.sqlite.JDBC"
             maxActive="4"
@@ -12,3 +13,4 @@
             validationQuery="SELECT 1">
     </Resource>
 </Context>
+
