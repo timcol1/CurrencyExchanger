@@ -116,13 +116,12 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
                         resultSet.getString("TargetCurrencyFullName"),
                         resultSet.getString("TargetCurrencySign")
                 );
-                ExchangeRate exchangeRate = new ExchangeRate(
+                return Optional.of(new ExchangeRate(
                         resultSet.getInt("ID"),
                         baseCurrency,
                         targetCurrency,
                         resultSet.getBigDecimal("Rate")
-                );
-                return Optional.of(exchangeRate);
+                ));
             }
         } catch (SQLException e) {
             log.error("Error with db");

@@ -58,13 +58,12 @@ public class CurrencyDaoImpl implements CurrencyDao {
             preparedStatement.setString(1, code);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                Currency currency = new Currency(
+                return Optional.of(new Currency(
                         resultSet.getInt("ID"),
                         resultSet.getString("Code"),
                         resultSet.getString("FullName"),
                         resultSet.getString("Sign")
-                );
-                return Optional.of(currency);
+                ));
             }
         } catch (SQLException e) {
             log.error("Error with db");

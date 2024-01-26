@@ -8,7 +8,7 @@
             maxWait="5000"
             name="jdbc/currencyExchanger"
             type="javax.sql.DataSource"
-            url="jdbc:sqlite:C:/Users/Timur/IdeaProjects/CurrencyExchanger/sqlite/currencies.db"
+            url="jdbc:sqlite:D:/Java/CurrencyExchanger/sqlite/currencies.db"
             validationQuery="SELECT 1">
     </Resource>
 </Context>
