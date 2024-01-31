@@ -1,9 +1,9 @@
 package avlyakulov.timur.servlets.currency;
 
-import avlyakulov.timur.dto.currency.CurrencyRequest;
 import avlyakulov.timur.mapper.CurrencyMapper;
 import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.service.CurrencyService;
+import avlyakulov.timur.servlets.currency.CurrenciesServlet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
@@ -21,8 +20,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CurrenciesServletTest {
@@ -36,12 +34,15 @@ class CurrenciesServletTest {
     @Mock
     private CurrencyService currencyService;
 
+    @Mock
+    CurrencyMapper currencyMapper;
+
     @InjectMocks
     private CurrenciesServlet currenciesServlet;
 
 
     @Test
-    void test() throws IOException, ServletException {
+    void test_post() throws IOException, ServletException {
         ObjectMapper objectMapper = new ObjectMapper();
         // Задаем параметры запроса
         when(request.getParameter("code")).thenReturn("USD");
@@ -73,6 +74,8 @@ class CurrenciesServletTest {
         // Проверяем, что статус установлен на 200
         verify(response).setStatus(HttpServletResponse.SC_OK);
     }
+
+
 
 
 //    MethodName_ExpectedBehavior_StateUnderTest

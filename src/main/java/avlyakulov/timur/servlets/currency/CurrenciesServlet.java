@@ -35,7 +35,10 @@ public class CurrenciesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info("We are getting all currencies");
-        List<CurrencyResponse> currencies = currencyService.findAll().stream().map(currencyMapper::mapToResponse).toList();
+        List<CurrencyResponse> currencies = currencyService.findAll()
+                .stream()
+                .map(currencyMapper::mapToResponse)
+                .toList();
         PrintWriter out = resp.getWriter();
         resp.setStatus(HttpServletResponse.SC_OK);//status 200
         out.print(objectMapper.writeValueAsString(currencies));

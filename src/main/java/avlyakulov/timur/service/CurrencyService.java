@@ -8,6 +8,7 @@ import avlyakulov.timur.dao.CurrencyDao;
 import avlyakulov.timur.dao.CurrencyDaoImpl;
 import avlyakulov.timur.model.Currency;
 
+import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +18,7 @@ public class CurrencyService {
     CurrencyDao currencyDao = new CurrencyDaoImpl();
 
     public CurrencyService() {
-        currencyDao.setConnectionBuilder(new PoolConnectionBuilder());
+        //currencyDao.setConnectionBuilder(new PoolConnectionBuilder());
     }
 
     public List<Currency> findAll() {
