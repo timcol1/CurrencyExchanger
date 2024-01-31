@@ -1,5 +1,6 @@
 package avlyakulov.timur.servlets.exchange;
 
+import avlyakulov.timur.connection.PoolConnectionBuilder;
 import avlyakulov.timur.dto.exchange.ExchangeResponse;
 import avlyakulov.timur.mapper.ExchangeMapper;
 import avlyakulov.timur.service.ExchangeService;
@@ -21,6 +22,11 @@ public class ExchangeServlet extends HttpServlet {
     ExchangeService exchangeService = new ExchangeService();
     ObjectMapper objectMapper = new ObjectMapper();
     ExchangeMapper exchangeMapper = new ExchangeMapper();
+
+    @Override
+    public void init() throws ServletException {
+        exchangeService.setConnectionBuilder(new PoolConnectionBuilder());
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

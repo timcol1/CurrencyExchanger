@@ -1,7 +1,6 @@
 package avlyakulov.timur.dao;
 
 import avlyakulov.timur.connection.ConnectionBuilder;
-import avlyakulov.timur.connection.PoolConnectionBuilder;
 import avlyakulov.timur.custom_exception.ExchangeRateCurrencyPairNotFoundException;
 import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.model.Exchange;
@@ -16,10 +15,10 @@ import java.sql.SQLException;
 
 @Slf4j
 public class ExchangeDaoImpl implements ExchangeDao {
-    private final ConnectionBuilder connectionBuilder;
+    private ConnectionBuilder connectionBuilder;
 
-    public ExchangeDaoImpl() {
-        connectionBuilder = new PoolConnectionBuilder();
+    public void setConnectionBuilder(ConnectionBuilder connectionBuilder) {
+        this.connectionBuilder = connectionBuilder;
     }
 
     private Connection getConnection() throws SQLException {
