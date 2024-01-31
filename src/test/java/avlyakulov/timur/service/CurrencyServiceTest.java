@@ -52,6 +52,7 @@ class CurrencyServiceTest {
         Mockito.when(currencyDao.findCurrencyByCode(code)).thenReturn(Optional.empty());
 
         Assertions.assertThrows(CurrencyNotFoundException.class, () -> currencyService.findByCode(code));
+        Mockito.verify(currencyDao, Mockito.times(1)).findCurrencyByCode(any());
     }
 
     @Test
@@ -59,6 +60,7 @@ class CurrencyServiceTest {
         String code = "INVALID_CODE";
 
         Assertions.assertThrows(BadCurrencyCodeException.class, () -> currencyService.findByCode(code));
+        Mockito.verify(currencyDao, Mockito.times(0)).findCurrencyByCode(any());
     }
 
     @Test

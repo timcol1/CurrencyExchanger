@@ -1,5 +1,6 @@
 package avlyakulov.timur.servlets.currency;
 
+import avlyakulov.timur.connection.PoolConnectionBuilder;
 import avlyakulov.timur.custom_exception.BadCurrencyCodeException;
 import avlyakulov.timur.dto.currency.CurrencyResponse;
 import avlyakulov.timur.mapper.CurrencyMapper;
@@ -24,6 +25,11 @@ public class CurrencyServlet extends HttpServlet {
     private final String generalUrl = "http://localhost:8080/currency/";
     private final int lengthUrl = generalUrl.length();
     private final CurrencyMapper currencyMapper = new CurrencyMapper();
+
+    @Override
+    public void init() throws ServletException {
+        currencyService.setConnectionBuilder(new PoolConnectionBuilder());
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

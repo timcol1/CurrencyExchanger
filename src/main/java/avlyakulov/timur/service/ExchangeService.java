@@ -1,7 +1,6 @@
 package avlyakulov.timur.service;
 
 import avlyakulov.timur.connection.ConnectionBuilder;
-import avlyakulov.timur.connection.PoolConnectionBuilder;
 import avlyakulov.timur.dao.ExchangeDao;
 import avlyakulov.timur.dao.ExchangeDaoImpl;
 import avlyakulov.timur.model.Exchange;

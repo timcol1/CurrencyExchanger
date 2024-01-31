@@ -1,5 +1,6 @@
 package avlyakulov.timur.servlets.exchange;
 
+import avlyakulov.timur.connection.PoolConnectionBuilder;
 import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissingException;
 import avlyakulov.timur.dto.exchange.ExchangeRateRequest;
 import avlyakulov.timur.dto.exchange.ExchangeRateResponse;
@@ -26,6 +27,11 @@ public class ExchangeRatesServlet extends HttpServlet {
     private final ExchangeRateService exchangeRateService = new ExchangeRateService();
     private final ObjectMapper objectMapper = new ObjectMapper();
     ExchangeRateMapper exchangeRateMapper = new ExchangeRateMapper();
+
+    @Override
+    public void init() throws ServletException {
+        exchangeRateService.setConnectionBuilder(new PoolConnectionBuilder());
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

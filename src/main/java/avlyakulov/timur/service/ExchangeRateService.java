@@ -1,8 +1,10 @@
 package avlyakulov.timur.service;
 
 import avlyakulov.timur.connection.ConnectionBuilder;
-import avlyakulov.timur.connection.PoolConnectionBuilder;
-import avlyakulov.timur.custom_exception.*;
+import avlyakulov.timur.custom_exception.CurrencyNotFoundException;
+import avlyakulov.timur.custom_exception.ExchangeRateAlreadyExistsException;
+import avlyakulov.timur.custom_exception.ExchangeRateCurrencyCodePairException;
+import avlyakulov.timur.custom_exception.ExchangeRateCurrencyPairNotFoundException;
 import avlyakulov.timur.dao.CurrencyDao;
 import avlyakulov.timur.dao.CurrencyDaoImpl;
 import avlyakulov.timur.dao.ExchangeRateDao;
@@ -63,7 +65,7 @@ public class ExchangeRateService {
                 throw new CurrencyNotFoundException("One (or both) currencies from the currency pair does not exist in the database");
             }
         } else {
-            throw new ExchangeRateAlreadyExistsException("A currency pair with this code pair already exists");
+            throw new ExchangeRateAlreadyExistsException("A currency pair with this code pair already exists ");
         }
     }
 
