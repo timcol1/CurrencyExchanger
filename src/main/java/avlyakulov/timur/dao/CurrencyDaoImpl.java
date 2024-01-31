@@ -1,6 +1,7 @@
 package avlyakulov.timur.dao;
 
 import avlyakulov.timur.connection.ConnectionBuilder;
+import avlyakulov.timur.connection.PoolConnectionBuilder;
 import avlyakulov.timur.model.Currency;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,10 +16,10 @@ import java.util.Optional;
 @Slf4j
 public class CurrencyDaoImpl implements CurrencyDao {
 
-    private ConnectionBuilder connectionBuilder;
+    private final ConnectionBuilder connectionBuilder;
 
-    public void setConnectionBuilder(ConnectionBuilder connectionBuilder) {
-        this.connectionBuilder = connectionBuilder;
+    public CurrencyDaoImpl() {
+        this.connectionBuilder = new PoolConnectionBuilder();
     }
 
     private Connection getConnection() throws SQLException {

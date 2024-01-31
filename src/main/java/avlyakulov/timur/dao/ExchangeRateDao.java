@@ -10,7 +10,5 @@ public interface ExchangeRateDao extends CrudDao<ExchangeRate, Integer> {
 
     Optional<ExchangeRate> findByCodes(String baseCurrencyCode, String targetCurrencyCode);
 
-    void setConnectionBuilder(ConnectionBuilder connectionBuilder);
-
     ExchangeRate update(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate);
 }

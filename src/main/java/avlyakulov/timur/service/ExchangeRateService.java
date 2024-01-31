@@ -21,10 +21,6 @@ public class ExchangeRateService {
 
     CurrencyDao currencyDao = new CurrencyDaoImpl();
 
-    public ExchangeRateService() {
-        exchangeRateDao.setConnectionBuilder(new PoolConnectionBuilder());
-        currencyDao.setConnectionBuilder(new PoolConnectionBuilder());
-    }
 
     public List<ExchangeRate> findAll() {
         return exchangeRateDao.findAll();
