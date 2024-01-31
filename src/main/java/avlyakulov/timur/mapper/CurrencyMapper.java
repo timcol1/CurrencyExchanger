@@ -15,6 +15,7 @@ public class CurrencyMapper implements RequestMapper<CurrencyRequest, Currency>,
         );
     }
 
+
     @Override
     public CurrencyResponse mapToResponse(Currency currency) {
         return new CurrencyResponse(
