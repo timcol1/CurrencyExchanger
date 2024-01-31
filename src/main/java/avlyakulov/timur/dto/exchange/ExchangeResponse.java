@@ -1,5 +1,6 @@
 package avlyakulov.timur.dto.exchange;
 
+import avlyakulov.timur.dto.currency.CurrencyResponse;
 import avlyakulov.timur.model.Currency;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,11 +11,11 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @AllArgsConstructor
-
 public class ExchangeResponse {
-    private Currency baseCurrency;
 
-    private Currency targetCurrency;
+    private CurrencyResponse baseCurrency;
+
+    private CurrencyResponse targetCurrency;
 
     private BigDecimal rate;
 
