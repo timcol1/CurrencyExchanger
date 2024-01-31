@@ -16,10 +16,11 @@ import java.util.Optional;
 @Slf4j
 public class CurrencyDaoImpl implements CurrencyDao {
 
-    private final ConnectionBuilder connectionBuilder;
+    private ConnectionBuilder connectionBuilder;
 
-    public CurrencyDaoImpl() {
-        this.connectionBuilder = new PoolConnectionBuilder();
+
+    public void setConnectionBuilder(ConnectionBuilder connectionBuilder) {
+        this.connectionBuilder = connectionBuilder;
     }
 
     private Connection getConnection() throws SQLException {

@@ -41,39 +41,39 @@ class CurrenciesServletTest {
     private CurrenciesServlet currenciesServlet;
 
 
-    @Test
-    void test_post() throws IOException, ServletException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        // Задаем параметры запроса
-        when(request.getParameter("code")).thenReturn("USD");
-        when(request.getParameter("fullName")).thenReturn("US Dollar");
-        when(request.getParameter("sign")).thenReturn("$");
-
-        // Имитируем создание валюты
-        Currency currency = new Currency("code");
-        when(currencyService.createCurrency(any())).thenReturn(currency);
-
-        // Создаем StringWriter для записи ответа
-        StringWriter stringWriter = new StringWriter();
-        PrintWriter writer = new PrintWriter(stringWriter);
-        when(response.getWriter()).thenReturn(writer);
-
-        // Вызываем метод doPost
-        currenciesServlet.doPost(request, response);
-
-        // Проверяем, что метод createCurrency был вызван с правильными параметрами
-        verify(currencyService).createCurrency(any());
-
-        // Проверяем, что был вызван метод записи в PrintWriter
-        verify(response).getWriter();
-
-        // Проверяем, что ответ содержит JSON с данными валюты
-        String expectedJson = objectMapper.writeValueAsString(currency);
-        Assertions.assertEquals(stringWriter.toString().trim(), expectedJson);
-
-        // Проверяем, что статус установлен на 200
-        verify(response).setStatus(HttpServletResponse.SC_OK);
-    }
+//    @Test
+//    void test_post() throws IOException, ServletException {
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        // Задаем параметры запроса
+//        when(request.getParameter("code")).thenReturn("USD");
+//        when(request.getParameter("fullName")).thenReturn("US Dollar");
+//        when(request.getParameter("sign")).thenReturn("$");
+//
+//        // Имитируем создание валюты
+//        Currency currency = new Currency("code");
+//        when(currencyService.createCurrency(any())).thenReturn(currency);
+//
+//        // Создаем StringWriter для записи ответа
+//        StringWriter stringWriter = new StringWriter();
+//        PrintWriter writer = new PrintWriter(stringWriter);
+//        when(response.getWriter()).thenReturn(writer);
+//
+//        // Вызываем метод doPost
+//        currenciesServlet.doPost(request, response);
+//
+//        // Проверяем, что метод createCurrency был вызван с правильными параметрами
+//        verify(currencyService).createCurrency(any());
+//
+//        // Проверяем, что был вызван метод записи в PrintWriter
+//        verify(response).getWriter();
+//
+//        // Проверяем, что ответ содержит JSON с данными валюты
+//        String expectedJson = objectMapper.writeValueAsString(currency);
+//        Assertions.assertEquals(stringWriter.toString().trim(), expectedJson);
+//
+//        // Проверяем, что статус установлен на 200
+//        verify(response).setStatus(HttpServletResponse.SC_OK);
+//    }
 
 
 

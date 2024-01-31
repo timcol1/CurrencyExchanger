@@ -1,5 +1,6 @@
 package avlyakulov.timur.service;
 
+import avlyakulov.timur.connection.ConnectionBuilder;
 import avlyakulov.timur.connection.PoolConnectionBuilder;
 import avlyakulov.timur.custom_exception.BadCurrencyCodeException;
 import avlyakulov.timur.custom_exception.CurrencyAlreadyExistsException;
@@ -16,9 +17,8 @@ public class CurrencyService {
 
     CurrencyDao currencyDao = new CurrencyDaoImpl();
 
-    public CurrencyService() {
-        //todo change logic of connection Builder
-        //currencyDao.setConnectionBuilder(new PoolConnectionBuilder());
+    public void setConnectionBuilder(ConnectionBuilder connectionBuilder) {
+        currencyDao.setConnectionBuilder(connectionBuilder);
     }
 
     public List<Currency> findAll() {

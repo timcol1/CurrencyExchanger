@@ -1,5 +1,6 @@
 package avlyakulov.timur.servlets.currency;
 
+import avlyakulov.timur.connection.PoolConnectionBuilder;
 import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissingException;
 import avlyakulov.timur.dto.currency.CurrencyRequest;
 import avlyakulov.timur.dto.currency.CurrencyResponse;
@@ -29,6 +30,7 @@ public class CurrenciesServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
+        currencyService.setConnectionBuilder(new PoolConnectionBuilder());
         log.info("Currencies servlet was created");
     }
 
