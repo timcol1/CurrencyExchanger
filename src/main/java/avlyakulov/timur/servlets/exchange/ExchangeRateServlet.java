@@ -1,5 +1,6 @@
 package avlyakulov.timur.servlets.exchange;
 
+import avlyakulov.timur.connection.PoolConnectionBuilder;
 import avlyakulov.timur.custom_exception.ExchangeRateCurrencyCodePairException;
 import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissingException;
 import avlyakulov.timur.dto.exchange.ExchangeRateResponse;
@@ -30,6 +31,11 @@ public class ExchangeRateServlet extends HttpServlet {
     private final ExchangeRateMapper exchangeRateMapper = new ExchangeRateMapper();
 
     @Override
+    public void init() throws ServletException {
+        exchangeRateService.setConnectionBuilder(new PoolConnectionBuilder());
+    }
+
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter out = resp.getWriter();
         String url = req.getRequestURL().toString();
@@ -56,7 +62,7 @@ public class ExchangeRateServlet extends HttpServlet {
         PrintWriter out = resp.getWriter();
         String rateFromParameter = req.getReader().readLine();
         String url = req.getRequestURL().toString();
-        if (url.length() < generalUrl.length()) {
+        if (url.length() < lengthUrl) {
             throw new ExchangeRateCurrencyCodePairException("The currency code of the pair are missing from the address or it is specified incorrectly");
         }
         String currencyPairCode = url.substring(lengthUrl);

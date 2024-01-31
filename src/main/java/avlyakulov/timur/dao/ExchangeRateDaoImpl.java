@@ -1,7 +1,6 @@
 package avlyakulov.timur.dao;
 
 import avlyakulov.timur.connection.ConnectionBuilder;
-import avlyakulov.timur.connection.PoolConnectionBuilder;
 import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.model.ExchangeRate;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +17,10 @@ import java.util.Optional;
 @Slf4j
 public class ExchangeRateDaoImpl implements ExchangeRateDao {
 
-    private final ConnectionBuilder connectionBuilder;
+    private ConnectionBuilder connectionBuilder;
 
-    public ExchangeRateDaoImpl() {
-        connectionBuilder = new PoolConnectionBuilder();
+    public void setConnectionBuilder(ConnectionBuilder connectionBuilder) {
+        this.connectionBuilder = connectionBuilder;
     }
 
     private Connection getConnection() throws SQLException {

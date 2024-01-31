@@ -1,5 +1,6 @@
 package avlyakulov.timur.service;
 
+import avlyakulov.timur.connection.ConnectionBuilder;
 import avlyakulov.timur.connection.PoolConnectionBuilder;
 import avlyakulov.timur.custom_exception.*;
 import avlyakulov.timur.dao.CurrencyDao;
@@ -20,6 +21,11 @@ public class ExchangeRateService {
     ExchangeRateDao exchangeRateDao = new ExchangeRateDaoImpl();
 
     CurrencyDao currencyDao = new CurrencyDaoImpl();
+
+    public void setConnectionBuilder(ConnectionBuilder connectionBuilder) {
+        currencyDao.setConnectionBuilder(connectionBuilder);
+        exchangeRateDao.setConnectionBuilder(connectionBuilder);
+    }
 
 
     public List<ExchangeRate> findAll() {

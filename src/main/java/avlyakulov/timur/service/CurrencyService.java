@@ -1,7 +1,6 @@
 package avlyakulov.timur.service;
 
 import avlyakulov.timur.connection.ConnectionBuilder;
-import avlyakulov.timur.connection.PoolConnectionBuilder;
 import avlyakulov.timur.custom_exception.BadCurrencyCodeException;
 import avlyakulov.timur.custom_exception.CurrencyAlreadyExistsException;
 import avlyakulov.timur.custom_exception.CurrencyNotFoundException;
