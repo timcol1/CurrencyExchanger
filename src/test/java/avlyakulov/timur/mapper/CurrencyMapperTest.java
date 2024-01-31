@@ -5,11 +5,9 @@ import avlyakulov.timur.dto.currency.CurrencyResponse;
 import avlyakulov.timur.model.Currency;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
 
 class CurrencyMapperTest {
 
