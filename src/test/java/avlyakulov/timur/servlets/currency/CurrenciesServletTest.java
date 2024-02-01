@@ -3,7 +3,7 @@ package avlyakulov.timur.servlets.currency;
 import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissingException;
 import avlyakulov.timur.mapper.CurrencyMapper;
 import avlyakulov.timur.model.Currency;
-import avlyakulov.timur.service.CurrencyServiceImpl;
+import avlyakulov.timur.service.CurrencyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,7 +30,7 @@ class CurrenciesServletTest {
     @Mock
     private HttpServletResponse response;
     @Mock
-    private CurrencyServiceImpl currencyServiceImpl;
+    private CurrencyService currencyService;
     @Mock
     private CurrencyMapper currencyMapper;
 
@@ -47,13 +47,13 @@ class CurrenciesServletTest {
         when(request.getParameter("code")).thenReturn("USD");
         when(request.getParameter("fullName")).thenReturn("US Dollar");
         when(request.getParameter("sign")).thenReturn("$");
-        when(currencyServiceImpl.createCurrency(any())).thenReturn(expectedCurrency);
+        when(currencyService.createCurrency(any())).thenReturn(expectedCurrency);
         when(response.getWriter()).thenReturn(new PrintWriter(new StringWriter()));
         when(objectMapper.writeValueAsString(expectedCurrency)).thenReturn(any());
 
         currenciesServlet.doPost(request, response);
 
-        verify(currencyServiceImpl, times(1)).createCurrency(any());
+        verify(currencyService, times(1)).createCurrency(any());
         verify(response).setStatus(HttpServletResponse.SC_OK);
     }
 
