@@ -1,6 +1,7 @@
-package avlyakulov.timur.dao;
+package avlyakulov.timur.dao.impl;
 
-import avlyakulov.timur.connection.ConnectionBuilder;
+import avlyakulov.timur.connection.DataSource;
+import avlyakulov.timur.dao.ExchangeRateDao;
 import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.model.ExchangeRate;
 import lombok.extern.slf4j.Slf4j;
@@ -17,15 +18,7 @@ import java.util.Optional;
 @Slf4j
 public class ExchangeRateDaoImpl implements ExchangeRateDao {
 
-    private ConnectionBuilder connectionBuilder;
 
-    public void setConnectionBuilder(ConnectionBuilder connectionBuilder) {
-        this.connectionBuilder = connectionBuilder;
-    }
-
-    private Connection getConnection() throws SQLException {
-        return connectionBuilder.getConnection();
-    }
 
 
     @Override
@@ -44,7 +37,7 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
                 "         INNER JOIN Currencies AS bc ON er.BaseCurrencyId = bc.ID\n" +
                 "         INNER JOIN Currencies AS tc ON er.TargetCurrencyId = tc.ID;\n";
 
-        try (Connection connection = getConnection();
+        try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(findAllQuery)) {
             Currency baseCurrency;
             Currency targetCurrency;
@@ -96,7 +89,7 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
                 "         INNER JOIN Currencies AS tc ON er.TargetCurrencyId = tc.ID\n" +
                 "WHERE BaseCurrencyCode = ? AND TargetCurrencyCode = ?;";
 
-        try (Connection connection = getConnection();
+        try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(findExchangeRateQuery)) {
             preparedStatement.setString(1, baseCurrencyCode);
             preparedStatement.setString(2, targetCurrencyCode);
@@ -137,7 +130,7 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
                 "        (SELECT ID FROM Currencies WHERE Code = ?),\n" +
                 "        ?)";
 
-        try (Connection connection = getConnection();
+        try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(createExchangeRateByPairCodeAndRate)) {
 
             preparedStatement.setString(1, exchangeRate.getBaseCurrency().getCode());
@@ -160,7 +153,7 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
                 "where BaseCurrencyId = (select ID from Currencies where code = ?) \n" +
                 "  and TargetCurrencyId = (select ID from Currencies where code = ?)";
 
-        try (Connection connection = getConnection();
+        try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(updateRateQuery)) {
 
             preparedStatement.setBigDecimal(1, rate);
