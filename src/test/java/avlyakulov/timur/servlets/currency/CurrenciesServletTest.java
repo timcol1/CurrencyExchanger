@@ -1,9 +1,9 @@
 package avlyakulov.timur.servlets.currency;
 
+import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissingException;
 import avlyakulov.timur.mapper.CurrencyMapper;
 import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.service.CurrencyService;
-import avlyakulov.timur.servlets.currency.CurrenciesServlet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,55 +27,44 @@ class CurrenciesServletTest {
 
     @Mock
     private HttpServletRequest request;
-
     @Mock
     private HttpServletResponse response;
-
     @Mock
     private CurrencyService currencyService;
+    @Mock
+    private CurrencyMapper currencyMapper;
 
     @Mock
-    CurrencyMapper currencyMapper;
-
+    private ObjectMapper objectMapper;
     @InjectMocks
     private CurrenciesServlet currenciesServlet;
 
 
-//    @Test
-//    void test_post() throws IOException, ServletException {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        // Задаем параметры запроса
-//        when(request.getParameter("code")).thenReturn("USD");
-//        when(request.getParameter("fullName")).thenReturn("US Dollar");
-//        when(request.getParameter("sign")).thenReturn("$");
-//
-//        // Имитируем создание валюты
-//        Currency currency = new Currency("code");
-//        when(currencyService.createCurrency(any())).thenReturn(currency);
-//
-//        // Создаем StringWriter для записи ответа
-//        StringWriter stringWriter = new StringWriter();
-//        PrintWriter writer = new PrintWriter(stringWriter);
-//        when(response.getWriter()).thenReturn(writer);
-//
-//        // Вызываем метод doPost
-//        currenciesServlet.doPost(request, response);
-//
-//        // Проверяем, что метод createCurrency был вызван с правильными параметрами
-//        verify(currencyService).createCurrency(any());
-//
-//        // Проверяем, что был вызван метод записи в PrintWriter
-//        verify(response).getWriter();
-//
-//        // Проверяем, что ответ содержит JSON с данными валюты
-//        String expectedJson = objectMapper.writeValueAsString(currency);
-//        Assertions.assertEquals(stringWriter.toString().trim(), expectedJson);
-//
-//        // Проверяем, что статус установлен на 200
-//        verify(response).setStatus(HttpServletResponse.SC_OK);
-//    }
+    @Test
+    void createCurrency_CurrencyWasCreated_CurrencyIsValid() throws IOException, ServletException {
+        // Задаем параметры запроса
+        Currency expectedCurrency = new Currency(1, "USD", "US Dollar", "$");
+        when(request.getParameter("code")).thenReturn("USD");
+        when(request.getParameter("fullName")).thenReturn("US Dollar");
+        when(request.getParameter("sign")).thenReturn("$");
+        when(currencyService.createCurrency(any())).thenReturn(expectedCurrency);
+        when(response.getWriter()).thenReturn(new PrintWriter(new StringWriter()));
+        when(objectMapper.writeValueAsString(expectedCurrency)).thenReturn(any());
 
+        currenciesServlet.doPost(request, response);
 
+        verify(currencyService, times(1)).createCurrency(any());
+        verify(response).setStatus(HttpServletResponse.SC_OK);
+    }
+
+    @Test
+    void createCurrency_CurrencyNotCreated_RequiredParameterIsMissing() throws IOException, ServletException {
+        when(request.getParameter("code")).thenReturn(null);
+        when(request.getParameter("fullName")).thenReturn("US Dollar");
+        when(request.getParameter("sign")).thenReturn("$");
+
+        Assertions.assertThrows(RequiredFormFieldIsMissingException.class, () -> currenciesServlet.doPost(request, response));
+    }
 
 
 //    MethodName_ExpectedBehavior_StateUnderTest

@@ -24,14 +24,17 @@ import java.util.List;
 public class CurrenciesServlet extends HttpServlet {
 
 
-    private final CurrencyService currencyService = new CurrencyService();
-    private final ObjectMapper objectMapper = new ObjectMapper();
-    private final CurrencyMapper currencyMapper = new CurrencyMapper();
+    private CurrencyService currencyService;
+    private ObjectMapper objectMapper;
+    private CurrencyMapper currencyMapper;
 
     @Override
     public void init() throws ServletException {
-        currencyService.setConnectionBuilder(new PoolConnectionBuilder());
         log.info("Currencies servlet was created");
+        currencyService = new CurrencyService();
+        currencyService.setConnectionBuilder(new PoolConnectionBuilder());
+        objectMapper = new ObjectMapper();
+        currencyMapper = new CurrencyMapper();
     }
 
     @Override

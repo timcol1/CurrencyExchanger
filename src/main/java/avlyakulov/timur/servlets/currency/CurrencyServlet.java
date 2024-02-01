@@ -20,15 +20,18 @@ import java.io.PrintWriter;
 @WebServlet(urlPatterns = "/currency/*")
 public class CurrencyServlet extends HttpServlet {
 
-    private final CurrencyService currencyService = new CurrencyService();
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private CurrencyService currencyService;
+    private ObjectMapper objectMapper;
     private final String generalUrl = "http://localhost:8080/currency/";
     private final int lengthUrl = generalUrl.length();
-    private final CurrencyMapper currencyMapper = new CurrencyMapper();
+    private CurrencyMapper currencyMapper;
 
     @Override
     public void init() throws ServletException {
+        currencyService = new CurrencyService();
         currencyService.setConnectionBuilder(new PoolConnectionBuilder());
+        objectMapper = new ObjectMapper();
+        currencyMapper = new CurrencyMapper();
     }
 
     @Override
