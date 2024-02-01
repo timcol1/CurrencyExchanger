@@ -8,6 +8,4 @@ import java.util.Optional;
 public interface CurrencyDao extends CrudDao<Currency, Integer> {
 
     Optional<Currency> findCurrencyByCode(String code);
-
-    void setConnectionBuilder(ConnectionBuilder connectionBuilder);
 }

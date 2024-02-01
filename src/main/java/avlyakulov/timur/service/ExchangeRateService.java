@@ -25,7 +25,6 @@ public class ExchangeRateService {
     CurrencyDao currencyDao = new CurrencyDaoImpl();
 
     public void setConnectionBuilder(ConnectionBuilder connectionBuilder) {
-        currencyDao.setConnectionBuilder(connectionBuilder);
         exchangeRateDao.setConnectionBuilder(connectionBuilder);
     }
 

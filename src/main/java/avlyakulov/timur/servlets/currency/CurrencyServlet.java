@@ -1,10 +1,10 @@
 package avlyakulov.timur.servlets.currency;
 
-import avlyakulov.timur.connection.PoolConnectionBuilder;
 import avlyakulov.timur.custom_exception.BadCurrencyCodeException;
+import avlyakulov.timur.dao.CurrencyDaoImpl;
 import avlyakulov.timur.dto.currency.CurrencyResponse;
 import avlyakulov.timur.mapper.CurrencyMapper;
-import avlyakulov.timur.service.CurrencyService;
+import avlyakulov.timur.service.CurrencyServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,7 +20,7 @@ import java.io.PrintWriter;
 @WebServlet(urlPatterns = "/currency/*")
 public class CurrencyServlet extends HttpServlet {
 
-    private CurrencyService currencyService;
+    private CurrencyServiceImpl currencyServiceImpl;
     private ObjectMapper objectMapper;
     private final String generalUrl = "http://localhost:8080/currency/";
     private final int lengthUrl = generalUrl.length();
@@ -28,8 +28,7 @@ public class CurrencyServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        currencyService = new CurrencyService();
-        currencyService.setConnectionBuilder(new PoolConnectionBuilder());
+        currencyServiceImpl = new CurrencyServiceImpl(new CurrencyDaoImpl());
         objectMapper = new ObjectMapper();
         currencyMapper = new CurrencyMapper();
     }
@@ -43,7 +42,7 @@ public class CurrencyServlet extends HttpServlet {
         if (url.length() < generalUrl.length()) {
             throw new BadCurrencyCodeException("Currency code is missing at address or you put wrong code");
         }
-        CurrencyResponse currencyResponse = currencyMapper.mapToResponse(currencyService.findByCode(currencyCode));
+        CurrencyResponse currencyResponse = currencyMapper.mapToResponse(currencyServiceImpl.findByCode(currencyCode));
         resp.setStatus(HttpServletResponse.SC_OK);
         out.print(objectMapper.writeValueAsString(currencyResponse));
     }

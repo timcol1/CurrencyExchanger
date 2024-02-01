@@ -1,12 +1,13 @@
 package avlyakulov.timur.servlets.currency;
 
-import avlyakulov.timur.connection.PoolConnectionBuilder;
 import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissingException;
+import avlyakulov.timur.dao.CurrencyDaoImpl;
 import avlyakulov.timur.dto.currency.CurrencyRequest;
 import avlyakulov.timur.dto.currency.CurrencyResponse;
 import avlyakulov.timur.mapper.CurrencyMapper;
 import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.service.CurrencyService;
+import avlyakulov.timur.service.CurrencyServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -23,7 +24,6 @@ import java.util.List;
 @Slf4j
 public class CurrenciesServlet extends HttpServlet {
 
-
     private CurrencyService currencyService;
     private ObjectMapper objectMapper;
     private CurrencyMapper currencyMapper;
@@ -31,8 +31,7 @@ public class CurrenciesServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         log.info("Currencies servlet was created");
-        currencyService = new CurrencyService();
-        currencyService.setConnectionBuilder(new PoolConnectionBuilder());
+        currencyService = new CurrencyServiceImpl(new CurrencyDaoImpl());
         objectMapper = new ObjectMapper();
         currencyMapper = new CurrencyMapper();
     }

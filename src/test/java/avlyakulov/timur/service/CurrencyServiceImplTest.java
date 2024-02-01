@@ -20,13 +20,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
-class CurrencyServiceTest {
+class CurrencyServiceImplTest {
 
     @Mock
     private CurrencyDao currencyDao;
 
     @InjectMocks
-    private CurrencyService currencyService;
+    private CurrencyServiceImpl currencyService;
 
 
     //MethodName_ExpectedBehavior_StateUnderTest
@@ -86,7 +86,9 @@ class CurrencyServiceTest {
         Currency currency = currencyService.createCurrency(expectedCurrency);
 
         assertNotNull(currency);
-        assertEquals(expectedCurrency, currency);
+        assertEquals(expectedCurrency.getCode(), currency.getCode());
+        assertEquals(expectedCurrency.getFullName(), currency.getFullName());
+        assertEquals(expectedCurrency.getSign(), currency.getSign());
         Mockito.verify(currencyDao, Mockito.times(1)).create(any());
         Mockito.verify(currencyDao, Mockito.times(1)).findCurrencyByCode(any());
     }
