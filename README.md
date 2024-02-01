@@ -1,15 +1,15 @@
-# currency-exchange-api
+# Currency Exchanger
 
-## Описание
-`currency-exchange-api` - это Java Servlet приложение, реализующее REST API для обмена валют. Основные функции включают управление валютами, установление обменных курсов и расчет суммы обмена по прямому, обратному и кросс курсу.
+## Description
+`Currency Exchanger` - It is Java Servlet APP, REST API for currency exchange.The main functions include managing currencies, setting exchange rates and calculating the amount of exchange at direct, reverse and cross rates.
 
-## Технологии
-Проект разработан с использованием Jakarta Servlets и поддерживается на сервере Tomcat 10.
+## Technologies
+The project is developed using Jakarta Servlets and is supported on a Tomcat 10 server.
 
-## Установка и Запуск
-Для запуска `currency-exchange-api` выполните следующие шаги:
-1. Склонируйте репозиторий.
-2. Соберите jar артефакт, используя команду `mvn package`.
+## Settings and Launch
+For Launch `currency-exchange-api` complete 3 steps:
+1. Clone the repository.
+2. Collect war artefact, using command `mvn package`.
 3. Запустите приложение, используя команду `java -jar [имя_собранного_артефакта].jar`.
 
 ## Использование API
