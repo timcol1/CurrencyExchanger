@@ -1,9 +1,10 @@
 package avlyakulov.timur.servlets.exchange;
 
-import avlyakulov.timur.connection.PoolConnectionBuilder;
+import avlyakulov.timur.dao.impl.ExchangeDaoImpl;
 import avlyakulov.timur.dto.exchange.ExchangeResponse;
 import avlyakulov.timur.mapper.ExchangeMapper;
 import avlyakulov.timur.service.ExchangeService;
+import avlyakulov.timur.service.impl.ExchangeServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -19,13 +20,16 @@ import java.math.BigDecimal;
 @Slf4j
 @WebServlet(urlPatterns = "/exchange")
 public class ExchangeServlet extends HttpServlet {
-    ExchangeService exchangeService = new ExchangeService();
-    ObjectMapper objectMapper = new ObjectMapper();
-    ExchangeMapper exchangeMapper = new ExchangeMapper();
+
+    ExchangeService exchangeService;
+    ObjectMapper objectMapper;
+    ExchangeMapper exchangeMapper;
 
     @Override
     public void init() throws ServletException {
-        exchangeService.setConnectionBuilder(new PoolConnectionBuilder());
+        exchangeService = new ExchangeServiceImpl(new ExchangeDaoImpl());
+        objectMapper = new ObjectMapper();
+        exchangeMapper = new ExchangeMapper();
     }
 
     @Override

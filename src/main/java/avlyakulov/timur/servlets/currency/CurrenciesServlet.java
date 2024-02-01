@@ -1,7 +1,7 @@
 package avlyakulov.timur.servlets.currency;
 
 import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissingException;
-import avlyakulov.timur.dao.CurrencyDaoImpl;
+import avlyakulov.timur.dao.impl.CurrencyDaoImpl;
 import avlyakulov.timur.dto.currency.CurrencyRequest;
 import avlyakulov.timur.dto.currency.CurrencyResponse;
 import avlyakulov.timur.mapper.CurrencyMapper;

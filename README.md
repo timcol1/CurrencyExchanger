@@ -7,7 +7,7 @@
 The project is developed using Jakarta Servlets and is supported on a Tomcat 10 server.
 
 ## Settings and Launch
-For Launch `currency-exchange-api` complete 3 steps:
+For Launch `Currency Exchanger` complete 3 steps:
 1. Clone the repository.
 2. Collect war artefact, using command `mvn package`.
 3. Запустите приложение, используя команду `java -jar [имя_собранного_артефакта].jar`.

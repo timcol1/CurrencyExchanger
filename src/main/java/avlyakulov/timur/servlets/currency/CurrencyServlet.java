@@ -1,7 +1,7 @@
 package avlyakulov.timur.servlets.currency;
 
 import avlyakulov.timur.custom_exception.BadCurrencyCodeException;
-import avlyakulov.timur.dao.CurrencyDaoImpl;
+import avlyakulov.timur.dao.impl.CurrencyDaoImpl;
 import avlyakulov.timur.dto.currency.CurrencyResponse;
 import avlyakulov.timur.mapper.CurrencyMapper;
 import avlyakulov.timur.service.CurrencyServiceImpl;
@@ -22,6 +22,7 @@ public class CurrencyServlet extends HttpServlet {
 
     private CurrencyServiceImpl currencyServiceImpl;
     private ObjectMapper objectMapper;
+    //todo избавиться от жесткой привязки к адреесу та как у других может быть не / а Currency-exchanger
     private final String generalUrl = "http://localhost:8080/currency/";
     private final int lengthUrl = generalUrl.length();
     private CurrencyMapper currencyMapper;

@@ -1,11 +1,13 @@
 package avlyakulov.timur.servlets.exchange;
 
-import avlyakulov.timur.connection.PoolConnectionBuilder;
 import avlyakulov.timur.custom_exception.ExchangeRateCurrencyCodePairException;
 import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissingException;
+import avlyakulov.timur.dao.impl.CurrencyDaoImpl;
+import avlyakulov.timur.dao.impl.ExchangeRateDaoImpl;
 import avlyakulov.timur.dto.exchange.ExchangeRateResponse;
 import avlyakulov.timur.mapper.ExchangeRateMapper;
 import avlyakulov.timur.service.ExchangeRateService;
+import avlyakulov.timur.service.impl.ExchangeRateServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -22,17 +24,19 @@ import java.math.BigDecimal;
 @WebServlet(urlPatterns = "/exchangeRate/*")
 public class ExchangeRateServlet extends HttpServlet {
 
-    private final ExchangeRateService exchangeRateService = new ExchangeRateService();
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private ExchangeRateService exchangeRateService;
+    private ObjectMapper objectMapper;
     private final String rateParameter = "rate=";
     private final int rateParameterLength = rateParameter.length();
     private final String generalUrl = "http://localhost:8080/exchangeRate/";
     private final int lengthUrl = generalUrl.length();
-    private final ExchangeRateMapper exchangeRateMapper = new ExchangeRateMapper();
+    private ExchangeRateMapper exchangeRateMapper;
 
     @Override
     public void init() throws ServletException {
-        exchangeRateService.setConnectionBuilder(new PoolConnectionBuilder());
+        exchangeRateService = new ExchangeRateServiceImpl(new ExchangeRateDaoImpl(), new CurrencyDaoImpl());
+        objectMapper = new ObjectMapper();
+        exchangeRateMapper = new ExchangeRateMapper();
     }
 
     @Override
