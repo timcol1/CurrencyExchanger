@@ -18,8 +18,8 @@ import java.util.Optional;
 public class ExchangeRateServiceImpl implements ExchangeRateService {
     private final int CURRENCY_PAIR_CODE_LENGTH_URL = 6;
 
-    private ExchangeRateDao exchangeRateDao;
-    private CurrencyDao currencyDao;
+    private final ExchangeRateDao exchangeRateDao;
+    private final CurrencyDao currencyDao;
 
     public ExchangeRateServiceImpl(ExchangeRateDao exchangeRateDao, CurrencyDao currencyDao) {
         this.exchangeRateDao = exchangeRateDao;
@@ -32,7 +32,7 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
     }
 
     public ExchangeRate findByCodes(String currencyPairCode) {
-        if (currencyPairCode.length() != CURRENCY_PAIR_CODE_LENGTH_URL) {
+        if (currencyPairCode.isBlank() || currencyPairCode.length() != CURRENCY_PAIR_CODE_LENGTH_URL) {
             throw new ExchangeRateCurrencyCodePairException("The currency codes of the pair are missing from the address or it is specified incorrectly");
         } else {
             String baseCurrencyCode = currencyPairCode.substring(0, 3);

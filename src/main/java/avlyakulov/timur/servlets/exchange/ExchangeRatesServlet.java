@@ -9,6 +9,7 @@ import avlyakulov.timur.mapper.ExchangeRateMapper;
 import avlyakulov.timur.model.ExchangeRate;
 import avlyakulov.timur.service.ExchangeRateService;
 import avlyakulov.timur.service.impl.ExchangeRateServiceImpl;
+import avlyakulov.timur.utils.CheckValidityOfParameter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -55,7 +56,7 @@ public class ExchangeRatesServlet extends HttpServlet {
 
         log.info("We got a request to create exchange rate with such parameters baseCurrencyCode {}, targetCurrencyCode {}, rate {}", baseCurrencyCode, targetCurrencyCode, rate);
 
-        if (checkValidityOfParameters(baseCurrencyCode, targetCurrencyCode, rate)) {
+        if (CheckValidityOfParameter.checkValidityOfParameters(baseCurrencyCode, targetCurrencyCode, rate)) {
             PrintWriter out = resp.getWriter();
             ExchangeRate exchangeRate = exchangeRateMapper.mapToEntity(new ExchangeRateRequest(baseCurrencyCode, targetCurrencyCode, new BigDecimal(rate)));
             exchangeRate = exchangeRateService.createExchangeRate(exchangeRate);
@@ -68,12 +69,4 @@ public class ExchangeRatesServlet extends HttpServlet {
         }
     }
 
-    private boolean checkValidityOfParameters(String... parameters) {
-        for (String parameter : parameters) {
-            if (parameter == null || parameter.isBlank()) {
-                return false;
-            }
-        }
-        return true;
-    }
 }

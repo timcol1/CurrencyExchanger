@@ -8,6 +8,7 @@ import avlyakulov.timur.dto.exchange.ExchangeRateResponse;
 import avlyakulov.timur.mapper.ExchangeRateMapper;
 import avlyakulov.timur.service.ExchangeRateService;
 import avlyakulov.timur.service.impl.ExchangeRateServiceImpl;
+import avlyakulov.timur.utils.CheckValidityOfParameter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -26,10 +27,6 @@ public class ExchangeRateServlet extends HttpServlet {
 
     private ExchangeRateService exchangeRateService;
     private ObjectMapper objectMapper;
-    private final String rateParameter = "rate=";
-    private final int rateParameterLength = rateParameter.length();
-    private final String generalUrl = "http://localhost:8080/exchangeRate/";
-    private final int lengthUrl = generalUrl.length();
     private ExchangeRateMapper exchangeRateMapper;
 
     @Override
@@ -43,10 +40,11 @@ public class ExchangeRateServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter out = resp.getWriter();
         String url = req.getRequestURL().toString();
-        if (url.length() < generalUrl.length()) {
+        int lastIndexOfUrl = url.lastIndexOf("/");
+        if (lastIndexOfUrl == -1) {
             throw new ExchangeRateCurrencyCodePairException("The currency code of the pair are missing from the address or it is specified incorrectly");
         }
-        String currencyPairCode = url.substring(lengthUrl);
+        String currencyPairCode = url.substring(lastIndexOfUrl + 1);
         log.info("We got a request to find a currency pair with such code {}", currencyPairCode);
         ExchangeRateResponse exchangeRateResponse = exchangeRateMapper.mapToResponse(exchangeRateService.findByCodes(currencyPairCode));
         resp.setStatus(HttpServletResponse.SC_OK);
@@ -66,13 +64,15 @@ public class ExchangeRateServlet extends HttpServlet {
         PrintWriter out = resp.getWriter();
         String rateFromParameter = req.getReader().readLine();
         String url = req.getRequestURL().toString();
-        if (url.length() < lengthUrl) {
+        int lastIndexOfUrl = url.lastIndexOf("/");
+        if (lastIndexOfUrl == -1) {
             throw new ExchangeRateCurrencyCodePairException("The currency code of the pair are missing from the address or it is specified incorrectly");
         }
-        String currencyPairCode = url.substring(lengthUrl);
+        String currencyPairCode = url.substring(lastIndexOfUrl + 1);
         log.info("We get a PATCH request to update rate in currency pair {} to this {}", currencyPairCode, rateFromParameter);
-        if (checkValidityOfParameters(rateFromParameter)) {
-            String rateStr = rateFromParameter.substring(rateParameterLength);
+        if (CheckValidityOfParameter.checkValidityOfParameters(rateFromParameter) && rateFromParameter.contains("rate=")) {
+            int indexOfRate = rateFromParameter.indexOf("=");
+            String rateStr = rateFromParameter.substring(indexOfRate + 1);
             BigDecimal rate = new BigDecimal(rateStr);
             ExchangeRateResponse exchangeRateResponse = exchangeRateMapper.mapToResponse(exchangeRateService.updateExchangeRate(currencyPairCode, rate));
             log.info("The exchange rate was updated");
@@ -83,12 +83,4 @@ public class ExchangeRateServlet extends HttpServlet {
         }
     }
 
-    private boolean checkValidityOfParameters(String... parameters) {
-        for (String parameter : parameters) {
-            if (parameter == null || parameter.isBlank()) {
-                return false;
-            }
-        }
-        return true;
-    }
 }

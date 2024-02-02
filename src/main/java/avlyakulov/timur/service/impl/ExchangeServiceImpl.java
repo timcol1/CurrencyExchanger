@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 public class ExchangeServiceImpl implements ExchangeService {
 
-    ExchangeDao exchangeDao;
+    private final ExchangeDao exchangeDao;
 
     public ExchangeServiceImpl(ExchangeDao exchangeDao) {
         this.exchangeDao = exchangeDao;

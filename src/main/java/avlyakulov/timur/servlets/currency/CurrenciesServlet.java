@@ -7,7 +7,8 @@ import avlyakulov.timur.dto.currency.CurrencyResponse;
 import avlyakulov.timur.mapper.CurrencyMapper;
 import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.service.CurrencyService;
-import avlyakulov.timur.service.CurrencyServiceImpl;
+import avlyakulov.timur.service.impl.CurrencyServiceImpl;
+import avlyakulov.timur.utils.CheckValidityOfParameter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -57,7 +58,7 @@ public class CurrenciesServlet extends HttpServlet {
 
         log.info("We got a request to create currency with such parameters code {}, fullName {}, sign {}", code, fullName, sign);
 
-        if (checkValidityOfParameters(code, fullName, sign)) {
+        if (CheckValidityOfParameter.checkValidityOfParameters(code, fullName, sign)) {
 
             Currency currency = currencyMapper.mapToEntity(new CurrencyRequest(code, fullName, sign));
 
@@ -75,14 +76,6 @@ public class CurrenciesServlet extends HttpServlet {
         }
     }
 
-    private boolean checkValidityOfParameters(String... parameters) {
-        for (String parameter : parameters) {
-            if (parameter == null || parameter.isBlank()) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     @Override
     public void destroy() {

@@ -5,6 +5,7 @@ import avlyakulov.timur.custom_exception.CurrencyAlreadyExistsException;
 import avlyakulov.timur.custom_exception.CurrencyNotFoundException;
 import avlyakulov.timur.dao.CurrencyDao;
 import avlyakulov.timur.model.Currency;
+import avlyakulov.timur.service.impl.CurrencyServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
