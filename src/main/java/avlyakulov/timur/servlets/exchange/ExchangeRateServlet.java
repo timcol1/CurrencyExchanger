@@ -2,8 +2,8 @@ package avlyakulov.timur.servlets.exchange;
 
 import avlyakulov.timur.custom_exception.ExchangeRateCurrencyCodePairException;
 import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissingException;
-import avlyakulov.timur.dao.impl.CurrencyDaoImpl;
-import avlyakulov.timur.dao.impl.ExchangeRateDaoImpl;
+import avlyakulov.timur.dao.CurrencyDaoImpl;
+import avlyakulov.timur.dao.ExchangeRateDaoImpl;
 import avlyakulov.timur.dto.exchange.ExchangeRateResponse;
 import avlyakulov.timur.mapper.ExchangeRateMapper;
 import avlyakulov.timur.service.ExchangeRateService;

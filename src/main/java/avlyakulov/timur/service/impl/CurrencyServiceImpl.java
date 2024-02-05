@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class CurrencyServiceImpl implements CurrencyService {
-    private final int CODE_LENGTH_URL = 3;
+    private static final int CODE_LENGTH_URL = 3;
 
     private final CurrencyDao currencyDao;
 

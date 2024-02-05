@@ -1,6 +1,6 @@
 package avlyakulov.timur.servlets.exchange;
 
-import avlyakulov.timur.dao.impl.ExchangeDaoImpl;
+import avlyakulov.timur.dao.ExchangeDaoImpl;
 import avlyakulov.timur.dto.exchange.ExchangeResponse;
 import avlyakulov.timur.mapper.ExchangeMapper;
 import avlyakulov.timur.service.ExchangeService;

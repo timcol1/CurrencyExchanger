@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="currencies" uuid="18487f3a-8575-42c3-90d8-746fa46eb22d">
+    <data-source source="LOCAL" name="currencies" uuid="a6d55ce7-e3d3-43cc-8da2-976df9af7a6a">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:D:\Java\CurrencyExchanger\sqlite\currencies.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:D:\Java\CurrencyExchanger\src\main\resources\currencies.db</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+      <libraries>
+        <library>
+          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.43.0/org/xerial/sqlite-jdbc/3.43.0.0/sqlite-jdbc-3.43.0.0.jar</url>
+        </library>
+      </libraries>
+    </data-source>
+    <data-source source="LOCAL" name="currencies_test" uuid="a2f1511a-d4c7-4215-8aae-c1cb860242b6">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:D:\Java\CurrencyExchanger\src\test\resources\currencies_test.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
       <libraries>
         <library>

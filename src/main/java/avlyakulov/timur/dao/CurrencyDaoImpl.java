@@ -1,4 +1,4 @@
-package avlyakulov.timur.dao.impl;
+package avlyakulov.timur.dao;
 
 import avlyakulov.timur.connection.DataSource;
 import avlyakulov.timur.dao.CurrencyDao;
