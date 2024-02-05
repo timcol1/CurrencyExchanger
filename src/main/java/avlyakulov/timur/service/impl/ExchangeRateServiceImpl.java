@@ -50,11 +50,11 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
     public ExchangeRate createExchangeRate(ExchangeRate exchangeRate) {
         String baseCurrencyCode = exchangeRate.getBaseCurrency().getCode();
         String targetCurrencyCode = exchangeRate.getTargetCurrency().getCode();
+        Optional<ExchangeRate> exchangeRateByCodes = exchangeRateDao.findByCodes(baseCurrencyCode, targetCurrencyCode);
 
-        if (checkExistenceOfCurrencyPair(exchangeRateDao.findByCodes(baseCurrencyCode, targetCurrencyCode))) {
+        if (exchangeRateByCodes.isEmpty()) {
             Optional<Currency> baseCurrency = currencyDao.findCurrencyByCode(baseCurrencyCode);
             Optional<Currency> targetCurrency = currencyDao.findCurrencyByCode(targetCurrencyCode);
-
             if (baseCurrency.isPresent() && targetCurrency.isPresent()) {
                 return exchangeRateDao.create(exchangeRate);
             } else {
@@ -65,10 +65,6 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
         }
     }
 
-
-    private boolean checkExistenceOfCurrencyPair(Optional<ExchangeRate> exchangeRate) {
-        return exchangeRate.isEmpty();
-    }
 
     public ExchangeRate updateExchangeRate(String currencyPairCode, BigDecimal updatedRate) {
         if (currencyPairCode.isBlank() || currencyPairCode.length() != CURRENCY_PAIR_CODE_LENGTH_URL) {
