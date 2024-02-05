@@ -48,7 +48,6 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
     }
 
     public ExchangeRate createExchangeRate(ExchangeRate exchangeRate) {
-
         String baseCurrencyCode = exchangeRate.getBaseCurrency().getCode();
         String targetCurrencyCode = exchangeRate.getTargetCurrency().getCode();
 
@@ -72,7 +71,7 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
     }
 
     public ExchangeRate updateExchangeRate(String currencyPairCode, BigDecimal updatedRate) {
-        if (currencyPairCode.length() != CURRENCY_PAIR_CODE_LENGTH_URL) {
+        if (currencyPairCode.isBlank() || currencyPairCode.length() != CURRENCY_PAIR_CODE_LENGTH_URL) {
             throw new ExchangeRateCurrencyCodePairException("The currency codes of the pair are missing from the address or it is specified incorrectly");
         } else {
             String baseCurrencyCode = currencyPairCode.substring(0, 3);
