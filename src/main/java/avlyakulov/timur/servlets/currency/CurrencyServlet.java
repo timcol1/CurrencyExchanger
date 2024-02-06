@@ -3,6 +3,7 @@ package avlyakulov.timur.servlets.currency;
 import avlyakulov.timur.connection.ConnectionDB;
 import avlyakulov.timur.custom_exception.BadCurrencyCodeException;
 import avlyakulov.timur.dao.CurrencyDaoImpl;
+import avlyakulov.timur.dao.DeploymentEnvironment;
 import avlyakulov.timur.dto.currency.CurrencyResponse;
 import avlyakulov.timur.mapper.CurrencyMapper;
 import avlyakulov.timur.service.CurrencyService;
@@ -29,7 +30,7 @@ public class CurrencyServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        currencyService = new CurrencyServiceImpl(new CurrencyDaoImpl(ConnectionDB.getConnection()));
+        currencyService = new CurrencyServiceImpl(new CurrencyDaoImpl(DeploymentEnvironment.PROD));
         objectMapper = new ObjectMapper();
         currencyMapper = new CurrencyMapper();
     }

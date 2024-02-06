@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ExchangeDaoTest {
 
-    private ExchangeDao exchangeDao = new ExchangeDaoImpl(DataSourceSimpleConnectionTestDB.getConnection());
+    private ExchangeDao exchangeDao = new ExchangeDaoImpl(DeploymentEnvironment.TEST);
 
     ExchangeDaoTest() throws SQLException {
     }

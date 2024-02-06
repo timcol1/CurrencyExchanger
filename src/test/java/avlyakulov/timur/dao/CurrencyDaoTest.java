@@ -14,7 +14,7 @@ import java.util.Optional;
 @Slf4j
 class CurrencyDaoTest {
 
-    private CurrencyDao currencyDao = new CurrencyDaoImpl(DataSourceSimpleConnectionTestDB.getConnection());
+    private CurrencyDao currencyDao = new CurrencyDaoImpl(DeploymentEnvironment.TEST);
 
     CurrencyDaoTest() throws SQLException {
     }
@@ -62,7 +62,7 @@ class CurrencyDaoTest {
         Currency expectedCurrency = new Currency("PLN", "Zloty", "Zł");
         Currency currency = currencyDao.create(expectedCurrency);
         //это нужно чтоб еще раз открыть соединение
-        currencyDao = new CurrencyDaoImpl(DataSourceSimpleConnectionTestDB.getConnection());
+        //currencyDao = new CurrencyDaoImpl(DataSourceSimpleConnectionTestDB.getConnection());
 
         Assertions.assertEquals(4, currencyDao.findAll().size());
         Assertions.assertNotNull(currency);

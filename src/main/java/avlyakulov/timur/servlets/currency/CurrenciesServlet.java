@@ -3,6 +3,7 @@ package avlyakulov.timur.servlets.currency;
 import avlyakulov.timur.connection.ConnectionDB;
 import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissingException;
 import avlyakulov.timur.dao.CurrencyDaoImpl;
+import avlyakulov.timur.dao.DeploymentEnvironment;
 import avlyakulov.timur.dto.currency.CurrencyRequest;
 import avlyakulov.timur.dto.currency.CurrencyResponse;
 import avlyakulov.timur.mapper.CurrencyMapper;
@@ -33,7 +34,7 @@ public class CurrenciesServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        currencyService = new CurrencyServiceImpl(new CurrencyDaoImpl(ConnectionDB.getConnection()));
+        currencyService = new CurrencyServiceImpl(new CurrencyDaoImpl(DeploymentEnvironment.PROD));
         objectMapper = new ObjectMapper();
         currencyMapper = new CurrencyMapper();
         log.info("Currencies servlet was created");

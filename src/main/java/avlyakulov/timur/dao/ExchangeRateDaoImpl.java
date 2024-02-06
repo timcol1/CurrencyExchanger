@@ -19,14 +19,14 @@ import java.util.Optional;
 public class ExchangeRateDaoImpl implements ExchangeRateDao {
 
 
-    private Connection connection;
-
-    public ExchangeRateDaoImpl(Connection connection) {
-        this.connection = connection;
-    }
+    private DeploymentEnvironment deploymentEnvironment;
 
     public Connection getConnection() {
-        return connection;
+        return ConnectionDB.getConnection(deploymentEnvironment);
+    }
+
+    public ExchangeRateDaoImpl(DeploymentEnvironment deploymentEnvironment) {
+        this.deploymentEnvironment = deploymentEnvironment;
     }
 
     @Override

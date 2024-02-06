@@ -1,5 +1,6 @@
 package avlyakulov.timur.dao;
 
+import avlyakulov.timur.connection.ConnectionDB;
 import avlyakulov.timur.model.Currency;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,14 +14,15 @@ import java.util.Optional;
 
 @Slf4j
 public class CurrencyDaoImpl implements CurrencyDao {
-    private Connection connection;
 
-    public CurrencyDaoImpl(Connection connection) {
-        this.connection = connection;
-    }
+    private DeploymentEnvironment deploymentEnvironment;
 
     public Connection getConnection() {
-        return connection;
+        return ConnectionDB.getConnection(deploymentEnvironment);
+    }
+
+    public CurrencyDaoImpl(DeploymentEnvironment deploymentEnvironment) {
+        this.deploymentEnvironment = deploymentEnvironment;
     }
 
     @Override

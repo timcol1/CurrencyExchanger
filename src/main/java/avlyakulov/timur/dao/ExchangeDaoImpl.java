@@ -17,14 +17,14 @@ import java.sql.SQLException;
 @Slf4j
 public class ExchangeDaoImpl implements ExchangeDao {
 
-    private Connection connection;
-
-    public ExchangeDaoImpl(Connection connection) {
-        this.connection = connection;
-    }
+    private DeploymentEnvironment deploymentEnvironment;
 
     public Connection getConnection() {
-        return connection;
+        return ConnectionDB.getConnection(deploymentEnvironment);
+    }
+
+    public ExchangeDaoImpl(DeploymentEnvironment deploymentEnvironment) {
+        this.deploymentEnvironment = deploymentEnvironment;
     }
 
     @Override

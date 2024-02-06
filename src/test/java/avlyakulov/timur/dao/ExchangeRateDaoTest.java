@@ -17,7 +17,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ExchangeRateDaoTest {
-    private ExchangeRateDao exchangeRateDao = new ExchangeRateDaoImpl(DataSourceSimpleConnectionTestDB.getConnection());
+    private ExchangeRateDao exchangeRateDao = new ExchangeRateDaoImpl(DeploymentEnvironment.TEST);
 
     ExchangeRateDaoTest() throws SQLException {
     }
@@ -69,7 +69,8 @@ class ExchangeRateDaoTest {
         ExchangeRate exchangeRateExpected = new ExchangeRate(baseCurrency, targetCurrency, rate);
 
         ExchangeRate exchangeRate = exchangeRateDao.create(exchangeRateExpected);
-        exchangeRateDao = new ExchangeRateDaoImpl(DataSourceSimpleConnectionTestDB.getConnection());
+
+        //exchangeRateDao = new ExchangeRateDaoImpl(DataSourceSimpleConnectionTestDB.getConnection());
         List<ExchangeRate> exchangeRates = exchangeRateDao.findAll();
 
         assertNotNull(exchangeRate);
