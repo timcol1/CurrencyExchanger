@@ -19,8 +19,14 @@ import java.util.Optional;
 public class ExchangeRateDaoImpl implements ExchangeRateDao {
 
 
-    public Connection getConnection() throws SQLException {
-        return ConnectionDB.getConnection();
+    private Connection connection;
+
+    public ExchangeRateDaoImpl(Connection connection) {
+        this.connection = connection;
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 
     @Override

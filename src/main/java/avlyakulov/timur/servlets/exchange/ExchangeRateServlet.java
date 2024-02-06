@@ -33,7 +33,7 @@ public class ExchangeRateServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        exchangeRateService = new ExchangeRateServiceImpl(new ExchangeRateDaoImpl(), new CurrencyDaoImpl(ConnectionDB.getConnection()));
+        exchangeRateService = new ExchangeRateServiceImpl(new ExchangeRateDaoImpl(ConnectionDB.getConnection()), new CurrencyDaoImpl(ConnectionDB.getConnection()));
         objectMapper = new ObjectMapper();
         exchangeRateMapper = new ExchangeRateMapper();
     }

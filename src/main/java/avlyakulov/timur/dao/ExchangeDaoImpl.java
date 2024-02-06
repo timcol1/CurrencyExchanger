@@ -17,8 +17,14 @@ import java.sql.SQLException;
 @Slf4j
 public class ExchangeDaoImpl implements ExchangeDao {
 
-    public Connection getConnection() throws SQLException {
-        return ConnectionDB.getConnection();
+    private Connection connection;
+
+    public ExchangeDaoImpl(Connection connection) {
+        this.connection = connection;
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 
     @Override
@@ -115,7 +121,7 @@ public class ExchangeDaoImpl implements ExchangeDao {
                 resultSet.getString("BaseCurrencyFullName"),
                 resultSet.getString("BaseCurrencySign")
         );
-        BigDecimal rate = BigDecimal.ONE.divide(resultSet.getBigDecimal("Rate"), 3, RoundingMode.HALF_UP);
+        BigDecimal rate = BigDecimal.ONE.divide(resultSet.getBigDecimal("Rate"), 2, RoundingMode.HALF_UP);
         BigDecimal convertedAmount = rate.multiply(amount);
         return new Exchange(
                 baseCurrency,
@@ -143,7 +149,7 @@ public class ExchangeDaoImpl implements ExchangeDao {
             );
             BigDecimal rateUSDA = currencyA.getBigDecimal("Rate");
             BigDecimal rateUSDB = currencyB.getBigDecimal("Rate");
-            BigDecimal rate = rateUSDB.divide(rateUSDA, 3, RoundingMode.HALF_UP);
+            BigDecimal rate = rateUSDB.divide(rateUSDA, 2, RoundingMode.HALF_UP);
             BigDecimal convertedAmount = rate.multiply(amount);
 
             return new Exchange(

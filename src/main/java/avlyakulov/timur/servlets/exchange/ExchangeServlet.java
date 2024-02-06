@@ -1,5 +1,7 @@
 package avlyakulov.timur.servlets.exchange;
 
+import avlyakulov.timur.connection.ConnectionDB;
+import avlyakulov.timur.connection.DataSourceHikariPool;
 import avlyakulov.timur.dao.ExchangeDaoImpl;
 import avlyakulov.timur.dto.exchange.ExchangeResponse;
 import avlyakulov.timur.mapper.ExchangeMapper;
@@ -27,7 +29,7 @@ public class ExchangeServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        exchangeService = new ExchangeServiceImpl(new ExchangeDaoImpl());
+        exchangeService = new ExchangeServiceImpl(new ExchangeDaoImpl(ConnectionDB.getConnection()));
         objectMapper = new ObjectMapper();
         exchangeMapper = new ExchangeMapper();
     }
