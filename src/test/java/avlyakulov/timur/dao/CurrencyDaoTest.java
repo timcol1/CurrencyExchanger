@@ -1,62 +1,82 @@
 package avlyakulov.timur.dao;
 
-import avlyakulov.timur.connection.DataSourceSimpleConnection;
+import avlyakulov.timur.connection.DataSourceSimpleConnectionTestDB;
 import avlyakulov.timur.model.Currency;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.*;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Slf4j
 class CurrencyDaoTest {
 
-    private Connection getConnection() throws SQLException {
-        return DataSourceSimpleConnection.getConnection();
+    private CurrencyDao currencyDao = new CurrencyDaoImpl(DataSourceSimpleConnectionTestDB.getConnection());
+
+    CurrencyDaoTest() throws SQLException {
     }
 
     @BeforeEach
-    void setUp() throws URISyntaxException, IOException, SQLException, ClassNotFoundException {
-        URL url = CurrencyDaoTest.class.getClassLoader().getResource("create_table_test.sql");
-        List<String> strings = Files.readAllLines(Paths.get(url.toURI()));
-        //здесь мы все строчки собираем в 1 строку
-        String sql = strings.stream().collect(Collectors.joining());
-        try (Connection connection = getConnection();
-             Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sql);
-        }
-        log.info("Sql query to create tables was completed");
+    void setUpEach() throws URISyntaxException, IOException, SQLException {
+        DBState.createDB();
     }
 
     @AfterEach()
-    void cleanUp() throws SQLException, ClassNotFoundException {
-        String sql = "DROP TABLE IF EXISTS Currencies; DROP TABLE IF EXISTS ExchangeRates;";
-        try (Connection connection = getConnection();
-             Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sql);
-        }
-        log.info("Sql query to drop tables was completed");
+    void cleanUp() throws SQLException {
+        DBState.cleanDB();
+    }
+
+    //MethodName_ExpectedBehavior_StateUnderTest
+    @Test
+    void findAll_findCurrencies_find3Currency() {
+        List<Currency> currencies = currencyDao.findAll();
+
+        Assertions.assertEquals(3, currencies.size());
     }
 
     @Test
-    void test1() throws SQLException {
-        List<Currency> currencies = new CurrencyDaoImpl().findAll();
-        int a = 123;
+    void findCurrencyByCode_findCurrency_currencyExists() {
+        String code = "USD";
+        Optional<Currency> currency = currencyDao.findCurrencyByCode(code);
+
+        Assertions.assertTrue(currency.isPresent());
+        Assertions.assertEquals(2, currency.get().getId());
+        Assertions.assertEquals("USD", currency.get().getCode());
+        Assertions.assertEquals("US Dollar", currency.get().getFullName());
+        Assertions.assertEquals("$", currency.get().getSign());
     }
 
-//    @Test
-//    void test2() {
-//        System.out.println("Test 2");
-//    }
-//
-//    @Test
-//    void test3() {
-//        System.out.println("Test 3");
-//    }
+    @Test
+    void findCurrencyByCode_findCurrency_currencyNotExist() {
+        String code = "PLN";
+        Optional<Currency> currency = currencyDao.findCurrencyByCode(code);
+
+        Assertions.assertFalse(currency.isPresent());
+    }
+
+    @Test
+    void create_createCurrency_currencyNotExistInDB() throws SQLException {
+        Currency expectedCurrency = new Currency("PLN", "Zloty", "Zł");
+        Currency currency = currencyDao.create(expectedCurrency);
+        //это нужно чтоб еще раз открыть соединение
+        currencyDao = new CurrencyDaoImpl(DataSourceSimpleConnectionTestDB.getConnection());
+        int sizeCurrencies = currencyDao.findAll().size();
+
+        Assertions.assertEquals(4, sizeCurrencies);
+        Assertions.assertNotNull(currency);
+        Assertions.assertEquals(5, currency.getId());
+        Assertions.assertEquals(expectedCurrency.getCode(), currency.getCode());
+        Assertions.assertEquals(expectedCurrency.getFullName(), currency.getFullName());
+        Assertions.assertEquals(expectedCurrency.getSign(), currency.getSign());
+    }
+
+    @Test
+    void create_createCurrency_currencyWithSuchCodeExistInDB() {
+        Currency expectedCurrency = new Currency("USD", "US Dollar", "$");
+
+        Assertions.assertThrows(RuntimeException.class, () -> currencyDao.create(expectedCurrency));
+    }
 }

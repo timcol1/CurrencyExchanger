@@ -11,7 +11,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 @Slf4j
-public class DataSourceSimpleConnection {
+public class DataSourceSimpleConnectionTestDB {
 
     @SneakyThrows
     public static Connection getConnection() throws SQLException {

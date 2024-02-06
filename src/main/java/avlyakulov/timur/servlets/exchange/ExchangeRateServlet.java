@@ -1,5 +1,6 @@
 package avlyakulov.timur.servlets.exchange;
 
+import avlyakulov.timur.connection.ConnectionDB;
 import avlyakulov.timur.custom_exception.ExchangeRateCurrencyCodePairException;
 import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissingException;
 import avlyakulov.timur.dao.CurrencyDaoImpl;
@@ -20,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 
 @Slf4j
 @WebServlet(urlPatterns = "/exchangeRate/*")
@@ -31,7 +33,7 @@ public class ExchangeRateServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        exchangeRateService = new ExchangeRateServiceImpl(new ExchangeRateDaoImpl(), new CurrencyDaoImpl());
+        exchangeRateService = new ExchangeRateServiceImpl(new ExchangeRateDaoImpl(), new CurrencyDaoImpl(ConnectionDB.getConnection()));
         objectMapper = new ObjectMapper();
         exchangeRateMapper = new ExchangeRateMapper();
     }

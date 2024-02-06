@@ -1,6 +1,6 @@
 package avlyakulov.timur.dao;
 
-import avlyakulov.timur.connection.DataSourceSimpleConnection;
+import avlyakulov.timur.connection.DataSourceSimpleConnectionTestDB;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -38,6 +38,6 @@ public class DBState {
     }
 
     private static Connection getConnection() throws SQLException {
-        return DataSourceSimpleConnection.getConnection();
+        return DataSourceSimpleConnectionTestDB.getConnection();
     }
 }

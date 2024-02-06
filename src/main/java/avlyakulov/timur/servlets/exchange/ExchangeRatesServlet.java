@@ -1,5 +1,6 @@
 package avlyakulov.timur.servlets.exchange;
 
+import avlyakulov.timur.connection.ConnectionDB;
 import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissingException;
 import avlyakulov.timur.dao.CurrencyDaoImpl;
 import avlyakulov.timur.dao.ExchangeRateDaoImpl;
@@ -33,7 +34,7 @@ public class ExchangeRatesServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        exchangeRateService = new ExchangeRateServiceImpl(new ExchangeRateDaoImpl(), new CurrencyDaoImpl());
+        exchangeRateService = new ExchangeRateServiceImpl(new ExchangeRateDaoImpl(), new CurrencyDaoImpl(ConnectionDB.getConnection()));
         objectMapper = new ObjectMapper();
         exchangeRateMapper = new ExchangeRateMapper();
     }

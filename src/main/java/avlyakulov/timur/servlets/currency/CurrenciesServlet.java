@@ -1,5 +1,6 @@
 package avlyakulov.timur.servlets.currency;
 
+import avlyakulov.timur.connection.ConnectionDB;
 import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissingException;
 import avlyakulov.timur.dao.CurrencyDaoImpl;
 import avlyakulov.timur.dto.currency.CurrencyRequest;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet(urlPatterns = "/currencies")
@@ -31,10 +33,10 @@ public class CurrenciesServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        log.info("Currencies servlet was created");
-        currencyService = new CurrencyServiceImpl(new CurrencyDaoImpl());
+        currencyService = new CurrencyServiceImpl(new CurrencyDaoImpl(ConnectionDB.getConnection()));
         objectMapper = new ObjectMapper();
         currencyMapper = new CurrencyMapper();
+        log.info("Currencies servlet was created");
     }
 
     @Override

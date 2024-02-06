@@ -1,5 +1,6 @@
 package avlyakulov.timur.servlets.currency;
 
+import avlyakulov.timur.connection.ConnectionDB;
 import avlyakulov.timur.custom_exception.BadCurrencyCodeException;
 import avlyakulov.timur.dao.CurrencyDaoImpl;
 import avlyakulov.timur.dto.currency.CurrencyResponse;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 @Slf4j
 @WebServlet(urlPatterns = "/currency/*")
@@ -27,7 +29,7 @@ public class CurrencyServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        currencyService = new CurrencyServiceImpl(new CurrencyDaoImpl());
+        currencyService = new CurrencyServiceImpl(new CurrencyDaoImpl(ConnectionDB.getConnection()));
         objectMapper = new ObjectMapper();
         currencyMapper = new CurrencyMapper();
     }

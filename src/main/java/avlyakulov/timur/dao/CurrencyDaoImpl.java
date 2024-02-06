@@ -1,7 +1,5 @@
 package avlyakulov.timur.dao;
 
-import avlyakulov.timur.connection.ConnectionDB;
-import avlyakulov.timur.connection.DataSourceHikariPool;
 import avlyakulov.timur.model.Currency;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,9 +13,14 @@ import java.util.Optional;
 
 @Slf4j
 public class CurrencyDaoImpl implements CurrencyDao {
+    private Connection connection;
 
-    public Connection getConnection() throws SQLException {
-        return ConnectionDB.getConnection();
+    public CurrencyDaoImpl(Connection connection) {
+        this.connection = connection;
+    }
+
+    public Connection getConnection() {
+        return connection;
     }
 
     @Override
