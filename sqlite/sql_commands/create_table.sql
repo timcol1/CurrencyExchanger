@@ -23,7 +23,8 @@ CREATE TABLE IF NOT EXISTS ExchangeRates (
     TargetCurrencyId INTEGER,
     Rate DECIMAL(6),
     FOREIGN KEY (BaseCurrencyId) REFERENCES currencies(ID),
-    FOREIGN KEY (TargetCurrencyId) REFERENCES currencies(ID)
+    FOREIGN KEY (TargetCurrencyId) REFERENCES currencies(ID),
+    CONSTRAINT unique_currency_pair UNIQUE (BaseCurrencyId, TargetCurrencyId)
 );
 
 INSERT INTO ExchangeRates (ID, BaseCurrencyId, TargetCurrencyId, Rate) VALUES (1, 2, 4, 0.93);

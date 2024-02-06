@@ -161,7 +161,7 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
                 "where BaseCurrencyId = (select ID from Currencies where code = ?) \n" +
                 "  and TargetCurrencyId = (select ID from Currencies where code = ?)";
 
-        try (Connection connection = DataSourceHikariPool.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(updateRateQuery)) {
 
             preparedStatement.setBigDecimal(1, rate);
