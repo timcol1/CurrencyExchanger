@@ -63,9 +63,8 @@ class CurrencyDaoTest {
         Currency currency = currencyDao.create(expectedCurrency);
         //это нужно чтоб еще раз открыть соединение
         currencyDao = new CurrencyDaoImpl(DataSourceSimpleConnectionTestDB.getConnection());
-        int sizeCurrencies = currencyDao.findAll().size();
 
-        Assertions.assertEquals(4, sizeCurrencies);
+        Assertions.assertEquals(4, currencyDao.findAll().size());
         Assertions.assertNotNull(currency);
         Assertions.assertEquals(5, currency.getId());
         Assertions.assertEquals(expectedCurrency.getCode(), currency.getCode());
