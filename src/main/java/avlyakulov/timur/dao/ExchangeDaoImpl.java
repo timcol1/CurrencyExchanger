@@ -1,8 +1,8 @@
 package avlyakulov.timur.dao;
 
-import avlyakulov.timur.connection.DataSource;
+import avlyakulov.timur.connection.ConnectionDB;
+import avlyakulov.timur.connection.DataSourceHikariPool;
 import avlyakulov.timur.custom_exception.ExchangeRateCurrencyPairNotFoundException;
-import avlyakulov.timur.dao.ExchangeDao;
 import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.model.Exchange;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +16,10 @@ import java.sql.SQLException;
 
 @Slf4j
 public class ExchangeDaoImpl implements ExchangeDao {
+
+    public Connection getConnection() throws SQLException {
+        return ConnectionDB.getConnection();
+    }
 
     @Override
     public Exchange exchange(String baseCurrencyCode, String targetCurrencyCode, BigDecimal amount) {
@@ -41,7 +45,7 @@ public class ExchangeDaoImpl implements ExchangeDao {
                 "WHERE BaseCurrencyId = (SELECT ID FROM Currencies WHERE Code = 'USD')\n" +
                 "  AND TargetCurrencyId = (SELECT ID FROM Currencies WHERE Code = ?);";
 
-        try (Connection connection = DataSource.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(exchangeQuery);
              PreparedStatement preparedStatementUSDA = connection.prepareStatement(exchangeRateUSDA);
              PreparedStatement preparedStatementUSDB = connection.prepareStatement(exchangeRateUSDB)) {

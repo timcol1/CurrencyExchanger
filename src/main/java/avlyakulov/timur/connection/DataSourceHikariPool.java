@@ -11,13 +11,13 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 @Slf4j
-public class DataSource {
+public class DataSourceHikariPool {
     private static final HikariConfig config = new HikariConfig();
     private static final HikariDataSource ds;
 
     static {
         config.setDriverClassName("org.sqlite.JDBC");
-        URL resource = DataSource.class.getClassLoader().getResource("currencies.db");
+        URL resource = DataSourceHikariPool.class.getClassLoader().getResource("currencies.db");
         String path = null;
         if (resource != null) {
             try {
@@ -34,7 +34,7 @@ public class DataSource {
         ds = new HikariDataSource(config);
     }
 
-    private DataSource() {
+    private DataSourceHikariPool() {
     }
 
     public static Connection getConnection() throws SQLException {

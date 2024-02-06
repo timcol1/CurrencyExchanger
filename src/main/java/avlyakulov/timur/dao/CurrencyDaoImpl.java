@@ -1,7 +1,7 @@
 package avlyakulov.timur.dao;
 
-import avlyakulov.timur.connection.DataSource;
-import avlyakulov.timur.dao.CurrencyDao;
+import avlyakulov.timur.connection.ConnectionDB;
+import avlyakulov.timur.connection.DataSourceHikariPool;
 import avlyakulov.timur.model.Currency;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,12 +16,16 @@ import java.util.Optional;
 @Slf4j
 public class CurrencyDaoImpl implements CurrencyDao {
 
+    public Connection getConnection() throws SQLException {
+        return ConnectionDB.getConnection();
+    }
+
     @Override
     public List<Currency> findAll() {
-        final String findAllQuery = "Select * From Currencies;";
+        final String findAllQuery = "SELECT * FROM Currencies;";
 
         List<Currency> currencies = new ArrayList<>();
-        try (Connection connection = DataSource.getConnection();
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(findAllQuery)) {
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -43,8 +47,8 @@ public class CurrencyDaoImpl implements CurrencyDao {
 
     @Override
     public Optional<Currency> findCurrencyByCode(String code) {
-        String findByCodeQuery = "Select * From Currencies Where Code = ?;";
-        try (Connection connection = DataSource.getConnection();
+        String findByCodeQuery = "SELECT * FROM Currencies WHERE Code = ?;";
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(findByCodeQuery)) {
             preparedStatement.setString(1, code);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -65,8 +69,8 @@ public class CurrencyDaoImpl implements CurrencyDao {
 
     @Override
     public Currency create(Currency currency) {
-        String createCurrencyQuery = "Insert into Currencies(Code, FullName , Sign) values (?, ?, ?);";
-        try (Connection connection = DataSource.getConnection();
+        String createCurrencyQuery = "INSERT INTO Currencies(Code, FullName , Sign) VALUES (?, ?, ?);";
+        try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(createCurrencyQuery)) {
 
             preparedStatement.setString(1, currency.getCode());
