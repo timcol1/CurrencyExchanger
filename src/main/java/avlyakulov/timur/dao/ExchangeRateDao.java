@@ -5,9 +5,9 @@ import avlyakulov.timur.model.ExchangeRate;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-public interface ExchangeRateDao extends CrudDao<ExchangeRate, Integer> {
+public interface ExchangeRateDao extends CrudDao<ExchangeRate> {
 
-    Optional<ExchangeRate> findByCodes(String baseCurrencyCode, String targetCurrencyCode);
+    ExchangeRate findByCodes(String baseCurrencyCode, String targetCurrencyCode);
 
     ExchangeRate update(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate);
 }

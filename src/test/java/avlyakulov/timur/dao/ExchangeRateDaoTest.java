@@ -1,6 +1,7 @@
 package avlyakulov.timur.dao;
 
 import avlyakulov.timur.connection.DataSourceSimpleConnectionTestDB;
+import avlyakulov.timur.custom_exception.ExchangeRateCurrencyCodePairException;
 import avlyakulov.timur.custom_exception.ExchangeRateCurrencyPairNotFoundException;
 import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.model.ExchangeRate;
@@ -46,20 +47,20 @@ class ExchangeRateDaoTest {
     void findByCodes_findCurrencyPair_pairExists() {
         String baseCurrencyCode = "USD";
         String targetCurrencyCode = "UAH";
-        Optional<ExchangeRate> exchangeRate = exchangeRateDao.findByCodes(baseCurrencyCode, targetCurrencyCode);
+        ExchangeRate exchangeRate = exchangeRateDao.findByCodes(baseCurrencyCode, targetCurrencyCode);
 
-        assertTrue(exchangeRate.isPresent());
-        assertEquals(1, exchangeRate.get().getId());
-        assertEquals(new BigDecimal("37.65"), exchangeRate.get().getRate());
+        assertNotNull(exchangeRate);
+        assertEquals(1, exchangeRate.getId());
+        assertEquals(new BigDecimal("37.65"), exchangeRate.getRate());
     }
 
     @Test
     void findByCodes_findCurrencyPair_pairNotExist() {
         String baseCurrencyCode = "USD";
         String targetCurrencyCode = "PLN";
-        Optional<ExchangeRate> exchangeRate = exchangeRateDao.findByCodes(baseCurrencyCode, targetCurrencyCode);
 
-        assertFalse(exchangeRate.isPresent());
+
+        assertThrows(ExchangeRateCurrencyPairNotFoundException.class, () -> exchangeRateDao.findByCodes(baseCurrencyCode, targetCurrencyCode));
     }
 
     @Test

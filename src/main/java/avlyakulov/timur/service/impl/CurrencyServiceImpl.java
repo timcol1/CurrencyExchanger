@@ -28,12 +28,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         if (code.isBlank() || code.length() != CODE_LENGTH_URL) {
             throw new BadCurrencyCodeException("Currency code is missing at address or you put wrong code");
         } else {
-            Optional<Currency> currency = currencyDao.findCurrencyByCode(code);
-            if (currency.isEmpty()) {
-                throw new CurrencyNotFoundException("Currency with this code " + code + " wasn't found");
-            } else {
-                return currency.get();
-            }
+            return currencyDao.findCurrencyByCode(code);
         }
     }
 

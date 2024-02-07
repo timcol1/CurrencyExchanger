@@ -15,16 +15,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Slf4j
-public class ExchangeDaoImpl implements ExchangeDao {
-
-    private DeploymentEnvironment deploymentEnvironment;
-
-    public Connection getConnection() {
-        return ConnectionDB.getConnection(deploymentEnvironment);
-    }
+public class ExchangeDaoImpl extends JDBCDao implements ExchangeDao {
 
     public ExchangeDaoImpl(DeploymentEnvironment deploymentEnvironment) {
-        this.deploymentEnvironment = deploymentEnvironment;
+        super(deploymentEnvironment);
     }
 
     @Override

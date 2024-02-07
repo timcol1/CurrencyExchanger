@@ -34,7 +34,7 @@ public class ExchangeRateServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        exchangeRateService = new ExchangeRateServiceImpl(new ExchangeRateDaoImpl(DeploymentEnvironment.PROD), new CurrencyDaoImpl(DeploymentEnvironment.PROD));
+        exchangeRateService = new ExchangeRateServiceImpl(new ExchangeRateDaoImpl(DeploymentEnvironment.PROD));
         objectMapper = new ObjectMapper();
         exchangeRateMapper = new ExchangeRateMapper();
     }

@@ -2,7 +2,8 @@ package avlyakulov.timur.dao;
 
 import java.util.List;
 
-public interface CrudDao<T, S> {
+public interface CrudDao<T> {
+
 
     List<T> findAll();
 

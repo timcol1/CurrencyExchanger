@@ -35,7 +35,7 @@ class CurrencyServiceTest {
         String code = "USD";
         Currency expectedCurrency = new Currency(Long.valueOf("1"), code, "US Dollar", "$");
 
-        Mockito.when(currencyDao.findCurrencyByCode(code)).thenReturn(Optional.of(expectedCurrency));
+        Mockito.when(currencyDao.findCurrencyByCode(code)).thenReturn(expectedCurrency);
 
         Currency currency = currencyService.findByCode(code);
 
@@ -49,7 +49,7 @@ class CurrencyServiceTest {
     void findByCode_throwCurrencyNotFoundException_CurrencyNotExist() {
         String code = "NOT";
 
-        Mockito.when(currencyDao.findCurrencyByCode(code)).thenReturn(Optional.empty());
+        Mockito.when(currencyDao.findCurrencyByCode(code)).thenThrow(CurrencyNotFoundException.class);
 
         Assertions.assertThrows(CurrencyNotFoundException.class, () -> currencyService.findByCode(code));
         Mockito.verify(currencyDao, Mockito.times(1)).findCurrencyByCode(any());

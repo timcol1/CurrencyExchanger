@@ -6,9 +6,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
 
-public interface CurrencyDao extends CrudDao<Currency, Integer> {
+public interface CurrencyDao extends CrudDao<Currency> {
 
-    Optional<Currency> findCurrencyByCode(String code);
+    Currency findCurrencyByCode(String code);
 
     Connection getConnection() throws SQLException;
 }

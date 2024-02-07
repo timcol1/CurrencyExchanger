@@ -17,17 +17,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-public class ExchangeRateDaoImpl implements ExchangeRateDao {
-
-
-    private DeploymentEnvironment deploymentEnvironment;
-
-    public Connection getConnection() {
-        return ConnectionDB.getConnection(deploymentEnvironment);
-    }
+public class ExchangeRateDaoImpl extends JDBCDao implements ExchangeRateDao {
 
     public ExchangeRateDaoImpl(DeploymentEnvironment deploymentEnvironment) {
-        this.deploymentEnvironment = deploymentEnvironment;
+        super(deploymentEnvironment);
     }
 
     @Override
@@ -64,7 +57,7 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
     }
 
     @Override
-    public Optional<ExchangeRate> findByCodes(String baseCurrencyCode, String targetCurrencyCode) {
+    public ExchangeRate findByCodes(String baseCurrencyCode, String targetCurrencyCode) {
         final String findExchangeRateQuery = "SELECT er.ID,\n" +
                 "       bc.ID       AS BaseCurrencyId,\n" +
                 "       bc.Code     AS BaseCurrencyCode,\n" +
@@ -87,9 +80,10 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                return Optional.of(setExchangeRate(resultSet));
+                return setExchangeRate(resultSet);
             } else {
-                return Optional.empty();
+                throw new ExchangeRateCurrencyPairNotFoundException("The exchange rate with such code pair " + baseCurrencyCode + targetCurrencyCode + " doesn't exist");
+
             }
         } catch (SQLException e) {
             log.error("Error with db");
@@ -113,7 +107,7 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
 
             preparedStatement.executeUpdate();
 
-            return findByCodes(exchangeRate.getBaseCurrency().getCode(), exchangeRate.getTargetCurrency().getCode()).get();
+            return findByCodes(exchangeRate.getBaseCurrency().getCode(), exchangeRate.getTargetCurrency().getCode());
         } catch (SQLiteException e) {
             log.error("We are here and error code is " + e.getResultCode());
             SQLiteErrorCode resultCode = e.getResultCode();
@@ -145,7 +139,7 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
             int rowsAffected = preparedStatement.executeUpdate();
 
             if (rowsAffected > 0) {
-                return findByCodes(baseCurrencyCode, targetCurrencyCode).get();
+                return findByCodes(baseCurrencyCode, targetCurrencyCode);
             } else {
                 throw new ExchangeRateCurrencyPairNotFoundException("The exchange rate with such code pair " + baseCurrencyCode + targetCurrencyCode + " doesn't exist");
             }

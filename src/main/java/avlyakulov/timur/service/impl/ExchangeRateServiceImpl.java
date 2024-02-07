@@ -1,12 +1,8 @@
 package avlyakulov.timur.service.impl;
 
-import avlyakulov.timur.custom_exception.CurrencyNotFoundException;
-import avlyakulov.timur.custom_exception.ExchangeRateAlreadyExistsException;
 import avlyakulov.timur.custom_exception.ExchangeRateCurrencyCodePairException;
 import avlyakulov.timur.custom_exception.ExchangeRateCurrencyPairNotFoundException;
-import avlyakulov.timur.dao.CurrencyDao;
 import avlyakulov.timur.dao.ExchangeRateDao;
-import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.model.ExchangeRate;
 import avlyakulov.timur.service.ExchangeRateService;
 
@@ -19,11 +15,9 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
     private final int CURRENCY_PAIR_CODE_LENGTH_URL = 6;
 
     private final ExchangeRateDao exchangeRateDao;
-    private final CurrencyDao currencyDao;
 
-    public ExchangeRateServiceImpl(ExchangeRateDao exchangeRateDao, CurrencyDao currencyDao) {
+    public ExchangeRateServiceImpl(ExchangeRateDao exchangeRateDao) {
         this.exchangeRateDao = exchangeRateDao;
-        this.currencyDao = currencyDao;
     }
 
 
@@ -38,12 +32,7 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
             String baseCurrencyCode = currencyPairCode.substring(0, 3);
             String targetCurrencyCode = currencyPairCode.substring(3);
 
-            Optional<ExchangeRate> exchangeRate = exchangeRateDao.findByCodes(baseCurrencyCode, targetCurrencyCode);
-            if (exchangeRate.isPresent()) {
-                return exchangeRate.get();
-            } else {
-                throw new ExchangeRateCurrencyPairNotFoundException("The exchange rate with such code pair " + currencyPairCode + " doesn't exist");
-            }
+            return exchangeRateDao.findByCodes(baseCurrencyCode, targetCurrencyCode);
         }
     }
 

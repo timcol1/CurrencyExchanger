@@ -2,6 +2,7 @@ package avlyakulov.timur.dao;
 
 import avlyakulov.timur.connection.ConnectionDB;
 import avlyakulov.timur.custom_exception.CurrencyAlreadyExistsException;
+import avlyakulov.timur.custom_exception.CurrencyNotFoundException;
 import avlyakulov.timur.model.Currency;
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,16 +12,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-public class CurrencyDaoImpl implements CurrencyDao {
-
-    private DeploymentEnvironment deploymentEnvironment;
-
-    public Connection getConnection() {
-        return ConnectionDB.getConnection(deploymentEnvironment);
-    }
+public class CurrencyDaoImpl extends JDBCDao implements CurrencyDao {
 
     public CurrencyDaoImpl(DeploymentEnvironment deploymentEnvironment) {
-        this.deploymentEnvironment = deploymentEnvironment;
+        super(deploymentEnvironment);
     }
 
     @Override
@@ -43,16 +38,16 @@ public class CurrencyDaoImpl implements CurrencyDao {
     }
 
     @Override
-    public Optional<Currency> findCurrencyByCode(String code) {
+    public Currency findCurrencyByCode(String code) {
         String findByCodeQuery = "SELECT * FROM Currencies WHERE Code = ?;";
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(findByCodeQuery)) {
             preparedStatement.setString(1, code);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return Optional.of(setCurrency(resultSet));
+                return setCurrency(resultSet);
             } else {
-                return Optional.empty();
+                throw new CurrencyNotFoundException("Currency with this code " + code + " wasn't found");
             }
         } catch (SQLException e) {
             log.error("Error with db");

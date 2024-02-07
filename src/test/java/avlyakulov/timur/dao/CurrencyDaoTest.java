@@ -1,6 +1,7 @@
 package avlyakulov.timur.dao;
 
 import avlyakulov.timur.custom_exception.CurrencyAlreadyExistsException;
+import avlyakulov.timur.custom_exception.CurrencyNotFoundException;
 import avlyakulov.timur.model.Currency;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
@@ -40,21 +41,20 @@ class CurrencyDaoTest {
     @Test
     void findCurrencyByCode_findCurrency_currencyExists() {
         String code = "USD";
-        Optional<Currency> currency = currencyDao.findCurrencyByCode(code);
+        Currency currency = currencyDao.findCurrencyByCode(code);
 
-        Assertions.assertTrue(currency.isPresent());
-        Assertions.assertEquals(2, currency.get().getId());
-        Assertions.assertEquals("USD", currency.get().getCode());
-        Assertions.assertEquals("US Dollar", currency.get().getName());
-        Assertions.assertEquals("$", currency.get().getSign());
+        Assertions.assertNotNull(currency);
+        Assertions.assertEquals(2, currency.getId());
+        Assertions.assertEquals("USD", currency.getCode());
+        Assertions.assertEquals("US Dollar", currency.getName());
+        Assertions.assertEquals("$", currency.getSign());
     }
 
     @Test
     void findCurrencyByCode_findCurrency_currencyNotExist() {
         String code = "PLN";
-        Optional<Currency> currency = currencyDao.findCurrencyByCode(code);
 
-        Assertions.assertFalse(currency.isPresent());
+        Assertions.assertThrows(CurrencyNotFoundException.class, () -> currencyDao.findCurrencyByCode(code));
     }
 
     @Test
