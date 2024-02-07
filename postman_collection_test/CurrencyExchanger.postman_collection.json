@@ -1,0 +1,222 @@
+{
+	"info": {
+		"_postman_id": "132fc4da-d050-4087-ad34-8e46565c8c6a",
+		"name": "CurrencyExchanger",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "29613522"
+	},
+	"item": [
+		{
+			"name": "getAllCurrencies",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/currencies"
+			},
+			"response": []
+		},
+		{
+			"name": "getCurrencyByCode",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/currency/CZA"
+			},
+			"response": []
+		},
+		{
+			"name": "createCurrency",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Czech Koruna",
+							"type": "text"
+						},
+						{
+							"key": "code",
+							"value": "CZA",
+							"type": "text"
+						},
+						{
+							"key": "sign",
+							"value": "Kč",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:8080/currencies"
+			},
+			"response": []
+		},
+		{
+			"name": "getExchangeRates",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/exchangeRates"
+			},
+			"response": []
+		},
+		{
+			"name": "getExchangeRateByCodePair",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/exchangeRate/USDCZK"
+			},
+			"response": []
+		},
+		{
+			"name": "createExchangeRate",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "baseCurrencyCode",
+							"value": "EUR",
+							"type": "text"
+						},
+						{
+							"key": "targetCurrencyCode",
+							"value": "UAH",
+							"type": "text"
+						},
+						{
+							"key": "rate",
+							"value": "40.41",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:8080/exchangeRates"
+			},
+			"response": []
+		},
+		{
+			"name": "updateExchangeRate",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "rate",
+							"value": "23.18",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:8080/exchangeRate/USDCZK"
+			},
+			"response": []
+		},
+		{
+			"name": "getExchangeAB",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/exchange?from=EUR&to=UAH&amount=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"exchange"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "EUR"
+						},
+						{
+							"key": "to",
+							"value": "UAH"
+						},
+						{
+							"key": "amount",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getExchangeBA",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/exchange?from=UAH&to=EUR&amount=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"exchange"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "UAH"
+						},
+						{
+							"key": "to",
+							"value": "EUR"
+						},
+						{
+							"key": "amount",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getExchangeUSDAUSDB=AB",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/exchange?from=PLN&to=CZK&amount=100",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"exchange"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "PLN"
+						},
+						{
+							"key": "to",
+							"value": "CZK"
+						},
+						{
+							"key": "amount",
+							"value": "100"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,225 @@
+{
+	"info": {
+		"_postman_id": "111f8dd4-8047-4b5c-a030-690a64dd1db4",
+		"name": "CurrencyExchanger Docker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "29613522"
+	},
+	"item": [
+		{
+			"name": "getAllCurrencies",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/CurrencyExchanger-1.0/currencies"
+			},
+			"response": []
+		},
+		{
+			"name": "getCurrencyByCode",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/CurrencyExchanger-1.0/currency/CZK"
+			},
+			"response": []
+		},
+		{
+			"name": "createCurrency",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Brazilian Real",
+							"type": "text"
+						},
+						{
+							"key": "code",
+							"value": "BRL",
+							"type": "text"
+						},
+						{
+							"key": "sign",
+							"value": "R$",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:8080/CurrencyExchanger-1.0/currencies"
+			},
+			"response": []
+		},
+		{
+			"name": "getExchangeRates",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/CurrencyExchanger-1.0/exchangeRates"
+			},
+			"response": []
+		},
+		{
+			"name": "getExchangeRateByCodePair",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/CurrencyExchanger-1.0/exchangeRate/USDEUR"
+			},
+			"response": []
+		},
+		{
+			"name": "createExchangeRate",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "baseCurrencyCode",
+							"value": "USD",
+							"type": "text"
+						},
+						{
+							"key": "targetCurrencyCode",
+							"value": "CZK",
+							"type": "text"
+						},
+						{
+							"key": "rate",
+							"value": "22.78",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:8080/CurrencyExchanger-1.0/exchangeRates"
+			},
+			"response": []
+		},
+		{
+			"name": "updateExchangeRate",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "rate",
+							"value": "0.93",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://localhost:8080/CurrencyExchanger-1.0/exchangeRate/USDEUR"
+			},
+			"response": []
+		},
+		{
+			"name": "getExchangeAB",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/CurrencyExchanger-1.0/exchange?from=EUR&to=UAH&amount=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"CurrencyExchanger-1.0",
+						"exchange"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "EUR"
+						},
+						{
+							"key": "to",
+							"value": "UAH"
+						},
+						{
+							"key": "amount",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getExchangeBA",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/CurrencyExchanger-1.0/exchange?from=UAH&to=EUR&amount=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"CurrencyExchanger-1.0",
+						"exchange"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "UAH"
+						},
+						{
+							"key": "to",
+							"value": "EUR"
+						},
+						{
+							"key": "amount",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getExchangeUSDAUSDB=AB",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/CurrencyExchanger-1.0/exchange?from=PLN&to=CZK&amount=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"CurrencyExchanger-1.0",
+						"exchange"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "PLN"
+						},
+						{
+							"key": "to",
+							"value": "CZK"
+						},
+						{
+							"key": "amount",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

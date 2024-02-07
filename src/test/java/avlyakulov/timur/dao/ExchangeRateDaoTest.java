@@ -1,7 +1,5 @@
 package avlyakulov.timur.dao;
 
-import avlyakulov.timur.connection.DataSourceSimpleConnectionTestDB;
-import avlyakulov.timur.custom_exception.ExchangeRateCurrencyCodePairException;
 import avlyakulov.timur.custom_exception.ExchangeRateCurrencyPairNotFoundException;
 import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.model.ExchangeRate;
@@ -14,7 +12,6 @@ import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
