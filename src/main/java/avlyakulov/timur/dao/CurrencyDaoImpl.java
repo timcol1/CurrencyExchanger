@@ -79,7 +79,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
              PreparedStatement preparedStatement = connection.prepareStatement(createCurrencyQuery)) {
 
             preparedStatement.setString(1, currency.getCode());
-            preparedStatement.setString(2, currency.getFullName());
+            preparedStatement.setString(2, currency.getName());
             preparedStatement.setString(3, currency.getSign());
 
             preparedStatement.executeUpdate();

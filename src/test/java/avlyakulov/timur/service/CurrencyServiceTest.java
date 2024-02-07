@@ -88,7 +88,7 @@ class CurrencyServiceTest {
 
         assertNotNull(currency);
         assertEquals(expectedCurrency.getCode(), currency.getCode());
-        assertEquals(expectedCurrency.getFullName(), currency.getFullName());
+        assertEquals(expectedCurrency.getName(), currency.getName());
         assertEquals(expectedCurrency.getSign(), currency.getSign());
         Mockito.verify(currencyDao, Mockito.times(1)).create(any());
         Mockito.verify(currencyDao, Mockito.times(1)).findCurrencyByCode(any());

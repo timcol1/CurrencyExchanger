@@ -56,14 +56,14 @@ public class CurrenciesServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String code = req.getParameter("code");
-        String fullName = req.getParameter("fullName");
+        String name = req.getParameter("name");
         String sign = req.getParameter("sign");
 
-        log.info("We got a request to create currency with such parameters code {}, fullName {}, sign {}", code, fullName, sign);
+        log.info("We got a request to create currency with such parameters code {}, name {}, sign {}", code, name, sign);
 
-        if (CheckValidityOfParameter.checkValidityOfParameters(code, fullName, sign)) {
+        if (CheckValidityOfParameter.checkValidityOfParameters(code, name, sign)) {
 
-            Currency currency = currencyMapper.mapToEntity(new CurrencyRequest(code, fullName, sign));
+            Currency currency = currencyMapper.mapToEntity(new CurrencyRequest(code, name, sign));
 
             PrintWriter out = resp.getWriter();
 

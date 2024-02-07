@@ -10,7 +10,7 @@ public class CurrencyMapper implements RequestMapper<CurrencyRequest, Currency>,
     public Currency mapToEntity(CurrencyRequest currencyRequest) {
         return new Currency(
                 currencyRequest.getCode(),
-                currencyRequest.getFullName(),
+                currencyRequest.getName(),
                 currencyRequest.getSign()
         );
     }
@@ -21,7 +21,7 @@ public class CurrencyMapper implements RequestMapper<CurrencyRequest, Currency>,
         return new CurrencyResponse(
                 currency.getId(),
                 currency.getCode(),
-                currency.getFullName(),
+                currency.getName(),
                 currency.getSign()
         );
     }

@@ -30,7 +30,7 @@ class CurrencyMapperTest {
         // Assert
         assertNotNull(currency);
         assertEquals(currencyRequest.getCode(), currency.getCode());
-        assertEquals(currencyRequest.getFullName(), currency.getFullName());
+        assertEquals(currencyRequest.getName(), currency.getName());
         assertEquals(currencyRequest.getSign(), currency.getSign());
     }
 
@@ -46,7 +46,7 @@ class CurrencyMapperTest {
         assertNotNull(currencyResponse);
         assertEquals(currency.getId(), currencyResponse.getId());
         assertEquals(currency.getCode(), currencyResponse.getCode());
-        assertEquals(currency.getFullName(), currencyResponse.getFullName());
+        assertEquals(currency.getName(), currencyResponse.getName());
         assertEquals(currency.getSign(), currencyResponse.getSign());
     }
 

@@ -45,7 +45,7 @@ class CurrenciesServletTest {
         // Задаем параметры запроса
         Currency expectedCurrency = new Currency(1, "USD", "US Dollar", "$");
         when(request.getParameter("code")).thenReturn("USD");
-        when(request.getParameter("fullName")).thenReturn("US Dollar");
+        when(request.getParameter("name")).thenReturn("US Dollar");
         when(request.getParameter("sign")).thenReturn("$");
         when(currencyService.createCurrency(any())).thenReturn(expectedCurrency);
         when(response.getWriter()).thenReturn(new PrintWriter(new StringWriter()));
@@ -60,7 +60,7 @@ class CurrenciesServletTest {
     @Test
     void createCurrency_CurrencyNotCreated_RequiredParameterIsMissing() throws IOException, ServletException {
         when(request.getParameter("code")).thenReturn(null);
-        when(request.getParameter("fullName")).thenReturn("US Dollar");
+        when(request.getParameter("name")).thenReturn("US Dollar");
         when(request.getParameter("sign")).thenReturn("$");
 
         Assertions.assertThrows(RequiredFormFieldIsMissingException.class, () -> currenciesServlet.doPost(request, response));

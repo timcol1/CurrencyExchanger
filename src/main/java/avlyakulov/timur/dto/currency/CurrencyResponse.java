@@ -14,8 +14,7 @@ public class CurrencyResponse {
 
     private String code;
 
-    @JsonProperty("name")
-    private String fullName;
+    private String name;
 
     private String sign;
 

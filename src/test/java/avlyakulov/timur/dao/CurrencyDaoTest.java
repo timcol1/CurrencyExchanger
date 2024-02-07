@@ -1,6 +1,5 @@
 package avlyakulov.timur.dao;
 
-import avlyakulov.timur.connection.DataSourceSimpleConnectionTestDB;
 import avlyakulov.timur.model.Currency;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
@@ -45,7 +44,7 @@ class CurrencyDaoTest {
         Assertions.assertTrue(currency.isPresent());
         Assertions.assertEquals(2, currency.get().getId());
         Assertions.assertEquals("USD", currency.get().getCode());
-        Assertions.assertEquals("US Dollar", currency.get().getFullName());
+        Assertions.assertEquals("US Dollar", currency.get().getName());
         Assertions.assertEquals("$", currency.get().getSign());
     }
 
@@ -68,7 +67,7 @@ class CurrencyDaoTest {
         Assertions.assertNotNull(currency);
         Assertions.assertEquals(5, currency.getId());
         Assertions.assertEquals(expectedCurrency.getCode(), currency.getCode());
-        Assertions.assertEquals(expectedCurrency.getFullName(), currency.getFullName());
+        Assertions.assertEquals(expectedCurrency.getName(), currency.getName());
         Assertions.assertEquals(expectedCurrency.getSign(), currency.getSign());
     }
 
