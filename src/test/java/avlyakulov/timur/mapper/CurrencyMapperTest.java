@@ -37,7 +37,7 @@ class CurrencyMapperTest {
     @Test
     public void testMapToResponse() {
         // Arrange
-        Currency currency = new Currency(1, "USD", "US Dollar", "$");
+        Currency currency = new Currency(Long.valueOf("1"), "USD", "US Dollar", "$");
 
         // Act
         CurrencyResponse currencyResponse = currencyMapper.mapToResponse(currency);

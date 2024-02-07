@@ -34,7 +34,7 @@ class CurrencyServiceTest {
     @Test
     void findByCode_findCurrencyByCode_CurrencyExists() {
         String code = "USD";
-        Currency expectedCurrency = new Currency(1, code, "US Dollar", "$");
+        Currency expectedCurrency = new Currency(Long.valueOf("1"), code, "US Dollar", "$");
 
         Mockito.when(currencyDao.findCurrencyByCode(code)).thenReturn(Optional.of(expectedCurrency));
 

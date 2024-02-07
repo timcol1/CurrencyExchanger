@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CurrencyResponse {
 
-    private int id;
+    private Long id;
 
     private String code;
 

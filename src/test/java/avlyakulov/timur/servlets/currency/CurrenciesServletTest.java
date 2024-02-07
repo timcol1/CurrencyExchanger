@@ -43,7 +43,7 @@ class CurrenciesServletTest {
     @Test
     void createCurrency_CurrencyWasCreated_CurrencyIsValid() throws IOException, ServletException {
         // Задаем параметры запроса
-        Currency expectedCurrency = new Currency(1, "USD", "US Dollar", "$");
+        Currency expectedCurrency = new Currency(Long.valueOf("1"), "USD", "US Dollar", "$");
         when(request.getParameter("code")).thenReturn("USD");
         when(request.getParameter("name")).thenReturn("US Dollar");
         when(request.getParameter("sign")).thenReturn("$");

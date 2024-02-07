@@ -1,5 +1,6 @@
 package avlyakulov.timur.dao;
 
+import avlyakulov.timur.custom_exception.CurrencyAlreadyExistsException;
 import avlyakulov.timur.model.Currency;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
@@ -60,8 +61,7 @@ class CurrencyDaoTest {
     void create_createCurrency_currencyNotExistInDB() throws SQLException {
         Currency expectedCurrency = new Currency("PLN", "Zloty", "Zł");
         Currency currency = currencyDao.create(expectedCurrency);
-        //это нужно чтоб еще раз открыть соединение
-        //currencyDao = new CurrencyDaoImpl(DataSourceSimpleConnectionTestDB.getConnection());
+
 
         Assertions.assertEquals(4, currencyDao.findAll().size());
         Assertions.assertNotNull(currency);
@@ -75,6 +75,6 @@ class CurrencyDaoTest {
     void create_createCurrency_currencyWithSuchCodeExistInDB() {
         Currency expectedCurrency = new Currency("USD", "US Dollar", "$");
 
-        Assertions.assertThrows(RuntimeException.class, () -> currencyDao.create(expectedCurrency));
+        Assertions.assertThrowsExactly(CurrencyAlreadyExistsException.class, () -> currencyDao.create(expectedCurrency));
     }
 }

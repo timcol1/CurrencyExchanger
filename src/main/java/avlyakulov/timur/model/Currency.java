@@ -11,7 +11,7 @@ import lombok.Setter;
 @EqualsAndHashCode
 public class Currency {
 
-    private int id;
+    private Long id;
 
     private String code;
 

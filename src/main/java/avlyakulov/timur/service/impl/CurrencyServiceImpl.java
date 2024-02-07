@@ -38,15 +38,6 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     public Currency createCurrency(Currency currency) {
-        Optional<Currency> currencyOptional = findSimpleByCode(currency.getCode());
-        if (currencyOptional.isPresent()) {
-            throw new CurrencyAlreadyExistsException("Currency with such code " + currency.getCode() + " is already exists");
-        } else {
-            return currencyDao.create(currency);
-        }
-    }
-
-    private Optional<Currency> findSimpleByCode(String code) {
-        return currencyDao.findCurrencyByCode(code);
+        return currencyDao.create(currency);
     }
 }
