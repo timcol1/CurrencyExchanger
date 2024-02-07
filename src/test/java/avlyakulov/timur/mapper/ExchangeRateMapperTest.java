@@ -37,10 +37,10 @@ class ExchangeRateMapperTest {
 
     @Test
     void mapToResponseTest() {
-        Currency baseCurrency = new Currency(1, "USD", "US Dollar", "$");
-        Currency targetCurrency = new Currency(2, "EUR", "Euro", "€");
+        Currency baseCurrency = new Currency(Long.valueOf("1"), "USD", "US Dollar", "$");
+        Currency targetCurrency = new Currency(Long.valueOf("2"), "EUR", "Euro", "€");
         BigDecimal rate = BigDecimal.ONE;
-        ExchangeRate exchangeRate = new ExchangeRate(1, baseCurrency, targetCurrency, rate);
+        ExchangeRate exchangeRate = new ExchangeRate(Long.valueOf("1"), baseCurrency, targetCurrency, rate);
 
         ExchangeRateResponse exchangeRateResponse = exchangeRateMapper.mapToResponse(exchangeRate);
 

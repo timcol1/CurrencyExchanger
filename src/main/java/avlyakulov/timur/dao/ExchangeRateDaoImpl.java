@@ -1,16 +1,17 @@
 package avlyakulov.timur.dao;
 
 import avlyakulov.timur.connection.ConnectionDB;
-import avlyakulov.timur.connection.DataSourceHikariPool;
+import avlyakulov.timur.custom_exception.ExchangeRateAlreadyExistsException;
+import avlyakulov.timur.custom_exception.ExchangeRateCurrencyCodePairException;
+import avlyakulov.timur.custom_exception.ExchangeRateCurrencyPairNotFoundException;
 import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.model.ExchangeRate;
 import lombok.extern.slf4j.Slf4j;
+import org.sqlite.SQLiteErrorCode;
+import org.sqlite.SQLiteException;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -47,31 +48,13 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
 
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(findAllQuery)) {
-            Currency baseCurrency;
-            Currency targetCurrency;
-            ResultSet resultSet = preparedStatement.executeQuery();
-            List<ExchangeRate> exchangeRates = new ArrayList<>();
-            while (resultSet.next()) {
-                baseCurrency = new Currency(
-                        resultSet.getInt("BaseCurrencyId"),
-                        resultSet.getString("BaseCurrencyCode"),
-                        resultSet.getString("BaseCurrencyFullName"),
-                        resultSet.getString("BaseCurrencySign")
-                );
 
-                targetCurrency = new Currency(
-                        resultSet.getInt("TargetCurrencyId"),
-                        resultSet.getString("TargetCurrencyCode"),
-                        resultSet.getString("TargetCurrencyFullName"),
-                        resultSet.getString("TargetCurrencySign")
-                );
-                ExchangeRate exchangeRate = new ExchangeRate(
-                        resultSet.getInt("ID"),
-                        baseCurrency,
-                        targetCurrency,
-                        resultSet.getBigDecimal("Rate")
-                );
-                exchangeRates.add(exchangeRate);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            List<ExchangeRate> exchangeRates = new ArrayList<>();
+
+            while (resultSet.next()) {
+                exchangeRates.add(setExchangeRate(resultSet));
             }
             return exchangeRates;
         } catch (SQLException e) {
@@ -104,31 +87,14 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                Currency baseCurrency = new Currency(
-                        resultSet.getInt("BaseCurrencyId"),
-                        resultSet.getString("BaseCurrencyCode"),
-                        resultSet.getString("BaseCurrencyFullName"),
-                        resultSet.getString("BaseCurrencySign")
-                );
-
-                Currency targetCurrency = new Currency(
-                        resultSet.getInt("TargetCurrencyId"),
-                        resultSet.getString("TargetCurrencyCode"),
-                        resultSet.getString("TargetCurrencyFullName"),
-                        resultSet.getString("TargetCurrencySign")
-                );
-                return Optional.of(new ExchangeRate(
-                        resultSet.getInt("ID"),
-                        baseCurrency,
-                        targetCurrency,
-                        resultSet.getBigDecimal("Rate")
-                ));
+                return Optional.of(setExchangeRate(resultSet));
+            } else {
+                return Optional.empty();
             }
         } catch (SQLException e) {
             log.error("Error with db");
             throw new RuntimeException(e);
         }
-        return Optional.empty();
     }
 
     @Override
@@ -139,7 +105,7 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
                 "        ?)";
 
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(createExchangeRateByPairCodeAndRate)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(createExchangeRateByPairCodeAndRate, Statement.RETURN_GENERATED_KEYS)) {
 
             preparedStatement.setString(1, exchangeRate.getBaseCurrency().getCode());
             preparedStatement.setString(2, exchangeRate.getTargetCurrency().getCode());
@@ -148,6 +114,14 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
             preparedStatement.executeUpdate();
 
             return findByCodes(exchangeRate.getBaseCurrency().getCode(), exchangeRate.getTargetCurrency().getCode()).get();
+        } catch (SQLiteException e) {
+            log.error("We are here and error code is " + e.getResultCode());
+            SQLiteErrorCode resultCode = e.getResultCode();
+            if (resultCode.equals(SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE)) {
+                throw new ExchangeRateAlreadyExistsException("Exchange rate with such code pair already exists");
+            } else {
+                throw new ExchangeRateCurrencyCodePairException("One or two currencies doesn't exits");
+            }
         } catch (SQLException e) {
             log.error("Error with db");
             throw new RuntimeException(e);
@@ -159,21 +133,47 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
         final String updateRateQuery = "update ExchangeRates\n" +
                 "set rate = ?\n" +
                 "where BaseCurrencyId = (select ID from Currencies where code = ?) \n" +
-                "  and TargetCurrencyId = (select ID from Currencies where code = ?)";
+                "  and TargetCurrencyId = (select ID from Currencies where code = ?);";
 
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(updateRateQuery)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(updateRateQuery, Statement.RETURN_GENERATED_KEYS)) {
 
             preparedStatement.setBigDecimal(1, rate);
             preparedStatement.setString(2, baseCurrencyCode);
             preparedStatement.setString(3, targetCurrencyCode);
 
-            preparedStatement.executeUpdate();
+            int rowsAffected = preparedStatement.executeUpdate();
 
-            return findByCodes(baseCurrencyCode, targetCurrencyCode).get();
+            if (rowsAffected > 0) {
+                return findByCodes(baseCurrencyCode, targetCurrencyCode).get();
+            } else {
+                throw new ExchangeRateCurrencyPairNotFoundException("The exchange rate with such code pair " + baseCurrencyCode + targetCurrencyCode + " doesn't exist");
+            }
         } catch (SQLException e) {
             log.error("Error with db");
             throw new RuntimeException(e);
         }
+    }
+
+    private ExchangeRate setExchangeRate(ResultSet resultSet) throws SQLException {
+        Currency baseCurrency = new Currency(
+                resultSet.getLong("BaseCurrencyId"),
+                resultSet.getString("BaseCurrencyCode"),
+                resultSet.getString("BaseCurrencyFullName"),
+                resultSet.getString("BaseCurrencySign")
+        );
+
+        Currency targetCurrency = new Currency(
+                resultSet.getLong("TargetCurrencyId"),
+                resultSet.getString("TargetCurrencyCode"),
+                resultSet.getString("TargetCurrencyFullName"),
+                resultSet.getString("TargetCurrencySign")
+        );
+        return new ExchangeRate(
+                resultSet.getLong("ID"),
+                baseCurrency,
+                targetCurrency,
+                resultSet.getBigDecimal("Rate")
+        );
     }
 }

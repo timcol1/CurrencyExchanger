@@ -86,13 +86,13 @@ public class ExchangeDaoImpl implements ExchangeDao {
 
     public Exchange getExchangeFromResultSetAB(ResultSet resultSet, BigDecimal amount) throws SQLException {
         Currency baseCurrency = new Currency(
-                resultSet.getInt("BaseCurrencyId"),
+                resultSet.getLong("BaseCurrencyId"),
                 resultSet.getString("BaseCurrencyCode"),
                 resultSet.getString("BaseCurrencyFullName"),
                 resultSet.getString("BaseCurrencySign")
         );
         Currency targetCurrency = new Currency(
-                resultSet.getInt("TargetCurrencyId"),
+                resultSet.getLong("TargetCurrencyId"),
                 resultSet.getString("TargetCurrencyCode"),
                 resultSet.getString("TargetCurrencyFullName"),
                 resultSet.getString("TargetCurrencySign")
@@ -110,13 +110,13 @@ public class ExchangeDaoImpl implements ExchangeDao {
 
     public Exchange getExchangeFromResultSetBA(ResultSet resultSet, BigDecimal amount) throws SQLException {
         Currency baseCurrency = new Currency(
-                resultSet.getInt("TargetCurrencyId"),
+                resultSet.getLong("TargetCurrencyId"),
                 resultSet.getString("TargetCurrencyCode"),
                 resultSet.getString("TargetCurrencyFullName"),
                 resultSet.getString("TargetCurrencySign")
         );
         Currency targetCurrency = new Currency(
-                resultSet.getInt("BaseCurrencyId"),
+                resultSet.getLong("BaseCurrencyId"),
                 resultSet.getString("BaseCurrencyCode"),
                 resultSet.getString("BaseCurrencyFullName"),
                 resultSet.getString("BaseCurrencySign")
@@ -136,13 +136,13 @@ public class ExchangeDaoImpl implements ExchangeDao {
         if (currencyA.next() && currencyB.next()) {
             log.info("Completed the exchange from USD-A and USD-B = AB");
             Currency baseCurrency = new Currency(
-                    currencyA.getInt("ID"),
+                    currencyA.getLong("ID"),
                     currencyA.getString("Code"),
                     currencyA.getString("FullName"),
                     currencyA.getString("Sign")
             );
             Currency targetCurrency = new Currency(
-                    currencyB.getInt("ID"),
+                    currencyB.getLong("ID"),
                     currencyB.getString("Code"),
                     currencyB.getString("FullName"),
                     currencyB.getString("Sign")

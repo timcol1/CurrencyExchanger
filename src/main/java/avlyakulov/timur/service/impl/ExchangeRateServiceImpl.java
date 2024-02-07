@@ -48,21 +48,7 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
     }
 
     public ExchangeRate createExchangeRate(ExchangeRate exchangeRate) {
-        String baseCurrencyCode = exchangeRate.getBaseCurrency().getCode();
-        String targetCurrencyCode = exchangeRate.getTargetCurrency().getCode();
-        Optional<ExchangeRate> exchangeRateByCodes = exchangeRateDao.findByCodes(baseCurrencyCode, targetCurrencyCode);
-
-        if (exchangeRateByCodes.isEmpty()) {
-            Optional<Currency> baseCurrency = currencyDao.findCurrencyByCode(baseCurrencyCode);
-            Optional<Currency> targetCurrency = currencyDao.findCurrencyByCode(targetCurrencyCode);
-            if (baseCurrency.isPresent() && targetCurrency.isPresent()) {
-                return exchangeRateDao.create(exchangeRate);
-            } else {
-                throw new CurrencyNotFoundException("One (or both) currencies from the currency pair does not exist in the database");
-            }
-        } else {
-            throw new ExchangeRateAlreadyExistsException("A currency pair with this code pair already exists ");
-        }
+        return exchangeRateDao.create(exchangeRate);
     }
 
 
@@ -73,13 +59,7 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
             String baseCurrencyCode = currencyPairCode.substring(0, 3);
             String targetCurrencyCode = currencyPairCode.substring(3);
 
-            Optional<ExchangeRate> exchangeRate = exchangeRateDao.findByCodes(baseCurrencyCode, targetCurrencyCode);
-            if (exchangeRate.isPresent()) {
-                return exchangeRateDao.update(baseCurrencyCode, targetCurrencyCode, updatedRate);
-            } else {
-                throw new ExchangeRateCurrencyPairNotFoundException("The exchange rate with such code pair " + currencyPairCode + " doesn't exist");
-            }
+            return exchangeRateDao.update(baseCurrencyCode, targetCurrencyCode, updatedRate);
         }
     }
-
 }

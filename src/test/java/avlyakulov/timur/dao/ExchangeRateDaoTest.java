@@ -1,6 +1,7 @@
 package avlyakulov.timur.dao;
 
 import avlyakulov.timur.connection.DataSourceSimpleConnectionTestDB;
+import avlyakulov.timur.custom_exception.ExchangeRateCurrencyPairNotFoundException;
 import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.model.ExchangeRate;
 import org.junit.jupiter.api.AfterEach;
@@ -105,7 +106,7 @@ class ExchangeRateDaoTest {
         String targetCurrencyCode = "PLN";
         BigDecimal updatedRate = new BigDecimal("4.04");
 
-        assertThrows(RuntimeException.class, () -> exchangeRateDao.update(baseCurrencyCode, targetCurrencyCode, updatedRate));
+        assertThrows(ExchangeRateCurrencyPairNotFoundException.class, () -> exchangeRateDao.update(baseCurrencyCode, targetCurrencyCode, updatedRate));
     }
 
 }

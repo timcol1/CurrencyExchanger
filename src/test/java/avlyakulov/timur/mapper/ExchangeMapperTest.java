@@ -21,8 +21,8 @@ class ExchangeMapperTest {
 
     @Test
     public void testMapToEntity() {
-        Currency baseCurrency = new Currency(1, "USD", "US Dollar", "$");
-        Currency targetCurrency = new Currency(2, "EUR", "Euro", "€");
+        Currency baseCurrency = new Currency(Long.valueOf("1"), "USD", "US Dollar", "$");
+        Currency targetCurrency = new Currency(Long.valueOf("2"), "EUR", "Euro", "€");
         BigDecimal rate = BigDecimal.ONE;
         BigDecimal amount = BigDecimal.TEN;
         BigDecimal convertedAmount = BigDecimal.TEN;

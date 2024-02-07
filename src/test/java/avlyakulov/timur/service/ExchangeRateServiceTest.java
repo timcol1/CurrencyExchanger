@@ -38,33 +38,4 @@ class ExchangeRateServiceTest {
         Mockito.verify(exchangeRateDao, Mockito.times(0)).findByCodes(any(), any());
         Mockito.verify(exchangeRateDao, Mockito.times(0)).update(any(), any(), any());
     }
-
-    @Test
-    void updateExchangeRate_expectedExceptionPairNotFound_exchangeRateNotExist() {
-        String currencyPairCode = "USDEUR"; //this currency pair doesn't exits
-        BigDecimal updateRate = BigDecimal.TEN;
-
-        Mockito.when(exchangeRateDao.findByCodes(any(), any())).thenReturn(Optional.empty());
-
-        assertThrows(ExchangeRateCurrencyPairNotFoundException.class, () -> exchangeRateService.updateExchangeRate(currencyPairCode, updateRate));
-        Mockito.verify(exchangeRateDao, Mockito.times(1)).findByCodes(any(), any());
-        Mockito.verify(exchangeRateDao, Mockito.times(0)).update(any(), any(), any());
-    }
-
-    @Test
-    void updateExchangeRate_expectedExceptionPairNotFound_exchangeRateExist() {
-        String currencyPairCode = "USDEUR"; //this currency pair doesn't exits
-        BigDecimal updateRate = BigDecimal.TEN;
-        ExchangeRate exchangeRate = new ExchangeRate(new Currency("USD"), new Currency("EUR"), new BigDecimal("0.93"));
-
-        Mockito.when(exchangeRateDao.findByCodes(any(), any())).thenReturn(Optional.of(exchangeRate));
-        Mockito.when(exchangeRateDao.update(any(), any(), any())).thenReturn(exchangeRate);
-
-        exchangeRateService.updateExchangeRate(currencyPairCode, updateRate);
-
-        Mockito.verify(exchangeRateDao, Mockito.times(1)).findByCodes(any(), any());
-        Mockito.verify(exchangeRateDao, Mockito.times(1)).update(any(), any(), any());
-    }
-
-
 }

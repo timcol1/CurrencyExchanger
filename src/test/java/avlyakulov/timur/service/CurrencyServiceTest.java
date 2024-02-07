@@ -16,8 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
@@ -64,25 +63,12 @@ class CurrencyServiceTest {
         Mockito.verify(currencyDao, Mockito.times(0)).findCurrencyByCode(any());
     }
 
-    @Test
-    void createCurrency_NotCreatedCurrency_CurrencyWithSuchCodeAlreadyExist() {
-        Currency expectedCurrency = new Currency("USD", "US Dollar", "$");
-
-        Mockito.when(currencyDao.findCurrencyByCode(expectedCurrency.getCode())).thenReturn(Optional.of(expectedCurrency));
-
-
-        Assertions.assertThrows(CurrencyAlreadyExistsException.class, () -> currencyService.createCurrency(expectedCurrency));
-        Mockito.verify(currencyDao, Mockito.times(0)).create(any());
-        Mockito.verify(currencyDao, Mockito.times(1)).findCurrencyByCode(any());
-    }
 
     @Test
     void createCurrency_successfullyCreatedCurrency_CreatedCurrencyAndCurrencyWithSuchCodeNotExist() {
         Currency expectedCurrency = new Currency("AUH", "Australian Hrivnya", "A₴");
 
-        Mockito.when(currencyDao.findCurrencyByCode(expectedCurrency.getCode())).thenReturn(Optional.empty());
         Mockito.when(currencyDao.create(expectedCurrency)).thenReturn(expectedCurrency);
-
 
         Currency currency = currencyService.createCurrency(expectedCurrency);
 
@@ -91,6 +77,5 @@ class CurrencyServiceTest {
         assertEquals(expectedCurrency.getName(), currency.getName());
         assertEquals(expectedCurrency.getSign(), currency.getSign());
         Mockito.verify(currencyDao, Mockito.times(1)).create(any());
-        Mockito.verify(currencyDao, Mockito.times(1)).findCurrencyByCode(any());
     }
 }

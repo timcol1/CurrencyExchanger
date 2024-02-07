@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class ExchangeRateResponse {
 
-    private int id;
+    private Long id;
 
     private CurrencyResponse baseCurrency;
 
