@@ -1,3 +1,5 @@
+PRAGMA foreign_keys = ON;
+
 CREATE TABLE IF NOT EXISTS Currencies (
     ID INTEGER PRIMARY KEY AUTOINCREMENT,
     Code VARCHAR UNIQUE,
@@ -19,8 +21,8 @@ INSERT INTO Currencies (ID, Code, FullName, Sign) VALUES (14, 'INR', 'Indian Rup
 
 CREATE TABLE IF NOT EXISTS ExchangeRates (
     ID INTEGER PRIMARY KEY AUTOINCREMENT,
-    BaseCurrencyId INTEGER,
-    TargetCurrencyId INTEGER,
+    BaseCurrencyId INTEGER NOT NULL,
+    TargetCurrencyId INTEGER NOT NULL,
     Rate DECIMAL(6),
     FOREIGN KEY (BaseCurrencyId) REFERENCES currencies(ID),
     FOREIGN KEY (TargetCurrencyId) REFERENCES currencies(ID),
