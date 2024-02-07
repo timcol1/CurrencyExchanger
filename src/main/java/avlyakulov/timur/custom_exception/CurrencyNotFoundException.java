@@ -9,6 +9,10 @@ public class CurrencyNotFoundException extends RuntimeException {
         super(message);
     }
 
+    public CurrencyNotFoundException(Throwable cause) {
+        super(cause);
+    }
+
     public CurrencyNotFoundException(String message, Throwable cause) {
         super(message, cause);
     }

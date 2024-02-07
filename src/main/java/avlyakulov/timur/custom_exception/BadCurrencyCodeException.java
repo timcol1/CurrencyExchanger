@@ -9,6 +9,10 @@ public class BadCurrencyCodeException extends RuntimeException {
         super(message);
     }
 
+    public BadCurrencyCodeException(Throwable cause) {
+        super(cause);
+    }
+
     public BadCurrencyCodeException(String message, Throwable cause) {
         super(message, cause);
     }

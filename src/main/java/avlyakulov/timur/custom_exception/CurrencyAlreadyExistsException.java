@@ -9,6 +9,10 @@ public class CurrencyAlreadyExistsException extends RuntimeException {
         super(message);
     }
 
+    public CurrencyAlreadyExistsException(Throwable cause) {
+        super(cause);
+    }
+
     public CurrencyAlreadyExistsException(String message, Throwable cause) {
         super(message, cause);
     }

@@ -8,4 +8,8 @@ public class ExchangeRateCurrencyCodePairException extends RuntimeException {
     public ExchangeRateCurrencyCodePairException(String message) {
         super(message);
     }
+
+    public ExchangeRateCurrencyCodePairException(Throwable cause) {
+        super(cause);
+    }
 }

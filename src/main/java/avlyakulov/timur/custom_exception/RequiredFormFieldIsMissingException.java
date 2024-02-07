@@ -11,4 +11,8 @@ public class RequiredFormFieldIsMissingException extends RuntimeException {
     public RequiredFormFieldIsMissingException(String message, Throwable cause) {
         super(message, cause);
     }
+
+    public RequiredFormFieldIsMissingException(Throwable cause) {
+        super(cause);
+    }
 }
