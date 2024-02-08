@@ -1,7 +1,5 @@
 package avlyakulov.timur.dao;
 
-import avlyakulov.timur.connection.ConnectionDB;
-import avlyakulov.timur.connection.DataSourceHikariPool;
 import avlyakulov.timur.custom_exception.ExchangeRateCurrencyPairNotFoundException;
 import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.model.Exchange;

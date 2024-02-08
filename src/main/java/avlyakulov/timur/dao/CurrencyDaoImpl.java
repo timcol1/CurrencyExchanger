@@ -1,6 +1,5 @@
 package avlyakulov.timur.dao;
 
-import avlyakulov.timur.connection.ConnectionDB;
 import avlyakulov.timur.custom_exception.CurrencyAlreadyExistsException;
 import avlyakulov.timur.custom_exception.CurrencyNotFoundException;
 import avlyakulov.timur.model.Currency;
@@ -9,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 public class CurrencyDaoImpl extends JDBCDao implements CurrencyDao {

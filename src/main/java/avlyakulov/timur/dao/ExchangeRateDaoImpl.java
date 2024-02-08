@@ -1,6 +1,5 @@
 package avlyakulov.timur.dao;
 
-import avlyakulov.timur.connection.ConnectionDB;
 import avlyakulov.timur.custom_exception.ExchangeRateAlreadyExistsException;
 import avlyakulov.timur.custom_exception.ExchangeRateCurrencyCodePairException;
 import avlyakulov.timur.custom_exception.ExchangeRateCurrencyPairNotFoundException;
@@ -14,7 +13,6 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 public class ExchangeRateDaoImpl extends JDBCDao implements ExchangeRateDao {
@@ -109,6 +107,7 @@ public class ExchangeRateDaoImpl extends JDBCDao implements ExchangeRateDao {
 
             return findByCodes(exchangeRate.getBaseCurrency().getCode(), exchangeRate.getTargetCurrency().getCode());
         } catch (SQLiteException e) {
+            //todo remove this shit
             log.error("We are here and error code is " + e.getResultCode());
             SQLiteErrorCode resultCode = e.getResultCode();
             if (resultCode.equals(SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE)) {

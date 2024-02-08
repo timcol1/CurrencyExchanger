@@ -4,13 +4,15 @@ import avlyakulov.timur.custom_exception.CurrencyAlreadyExistsException;
 import avlyakulov.timur.custom_exception.CurrencyNotFoundException;
 import avlyakulov.timur.model.Currency;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.sql.*;
+import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 class CurrencyDaoTest {
