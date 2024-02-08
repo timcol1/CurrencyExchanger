@@ -107,8 +107,7 @@ public class ExchangeRateDaoImpl extends JDBCDao implements ExchangeRateDao {
 
             return findByCodes(exchangeRate.getBaseCurrency().getCode(), exchangeRate.getTargetCurrency().getCode());
         } catch (SQLiteException e) {
-            //todo remove this shit
-            log.error("We are here and error code is " + e.getResultCode());
+            log.error("Error code is " + e.getResultCode());
             SQLiteErrorCode resultCode = e.getResultCode();
             if (resultCode.equals(SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE)) {
                 throw new ExchangeRateAlreadyExistsException("Exchange rate with such code pair already exists");

@@ -5,6 +5,8 @@ import avlyakulov.timur.connection.ConnectionDB;
 import java.sql.Connection;
 
 public class JDBCDao {
+
+    //todo make rounding for exchange
     private DeploymentEnvironment deploymentEnvironment;
 
     public Connection getConnection() {
