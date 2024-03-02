@@ -2,8 +2,18 @@
 
 ## Description
 `Currency Exchanger` - It is Java Servlet App with Unit tests REST API for currency exchange.The main functions include managing currencies, setting exchange rates and calculating the amount of exchange at direct, reverse and cross rates.
+## Project Stack
+* Rest API
+* Servlets
+* Java EE
+* SQLite
+* Slf4j
+* Jackson
+* JUnit 5
+* Mockito
+* Hikari Pool
 
-## Technologies
+## Technologies 
 The project is developed using Jakarta Servlets I also wrote Unit tests for this app and it is supports Tomcat 10 server. I used sql database as SQLite. I also used Hikari pool to make connection to Database. I
 
 ## Settings and Launch
