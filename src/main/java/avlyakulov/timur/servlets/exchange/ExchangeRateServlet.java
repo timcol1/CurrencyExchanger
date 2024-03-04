@@ -1,9 +1,7 @@
 package avlyakulov.timur.servlets.exchange;
 
-import avlyakulov.timur.connection.ConnectionDB;
 import avlyakulov.timur.custom_exception.ExchangeRateCurrencyCodePairException;
 import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissingException;
-import avlyakulov.timur.dao.CurrencyDaoImpl;
 import avlyakulov.timur.dao.DeploymentEnvironment;
 import avlyakulov.timur.dao.ExchangeRateDaoImpl;
 import avlyakulov.timur.dto.exchange.ExchangeRateResponse;
@@ -22,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
-import java.sql.SQLException;
 
 @Slf4j
 @WebServlet(urlPatterns = "/exchangeRate/*")
@@ -31,6 +28,8 @@ public class ExchangeRateServlet extends HttpServlet {
     private ExchangeRateService exchangeRateService;
     private ObjectMapper objectMapper;
     private ExchangeRateMapper exchangeRateMapper;
+
+    private final int CURRENCY_PAIR_CODE_LENGTH_URL = 6;
 
     @Override
     public void init() throws ServletException {
@@ -48,11 +47,17 @@ public class ExchangeRateServlet extends HttpServlet {
             throw new ExchangeRateCurrencyCodePairException("The currency code of the pair are missing from the address or it is specified incorrectly");
         }
         String currencyPairCode = url.substring(lastIndexOfUrl + 1);
-        log.info("We got a request to find a currency pair with such code {}", currencyPairCode);
-        ExchangeRateResponse exchangeRateResponse = exchangeRateMapper.mapToResponse(exchangeRateService.findByCodes(currencyPairCode));
-        resp.setStatus(HttpServletResponse.SC_OK);
-        out.print(objectMapper.writeValueAsString(exchangeRateResponse));
+        if (currencyPairCode.isBlank() || currencyPairCode.length() != CURRENCY_PAIR_CODE_LENGTH_URL) {
+            throw new ExchangeRateCurrencyCodePairException("The currency codes of the pair are missing from the address or it is specified incorrectly");
+        } else {
+            exchangeRateService.findByCodes(currencyPairCode);
+            log.info("We got a request to find a currency pair with such code {}", currencyPairCode);
+            ExchangeRateResponse exchangeRateResponse = exchangeRateMapper.mapToResponse(exchangeRateService.findByCodes(currencyPairCode));
+            resp.setStatus(HttpServletResponse.SC_OK);
+            out.print(objectMapper.writeValueAsString(exchangeRateResponse));
+        }
     }
+
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -72,17 +77,21 @@ public class ExchangeRateServlet extends HttpServlet {
             throw new ExchangeRateCurrencyCodePairException("The currency code of the pair are missing from the address or it is specified incorrectly");
         }
         String currencyPairCode = url.substring(lastIndexOfUrl + 1);
-        log.info("We get a PATCH request to update rate in currency pair {} to this {}", currencyPairCode, rateFromParameter);
-        if (CheckValidityOfParameter.checkValidityOfParameters(rateFromParameter) && rateFromParameter.contains("rate=")) {
-            int indexOfRate = rateFromParameter.indexOf("=");
-            String rateStr = rateFromParameter.substring(indexOfRate + 1);
-            BigDecimal rate = new BigDecimal(rateStr);
-            ExchangeRateResponse exchangeRateResponse = exchangeRateMapper.mapToResponse(exchangeRateService.updateExchangeRate(currencyPairCode, rate));
-            log.info("The exchange rate was updated");
-            resp.setStatus(HttpServletResponse.SC_OK);
-            out.print(objectMapper.writeValueAsString(exchangeRateResponse));
+        if (currencyPairCode.isBlank() || currencyPairCode.length() != CURRENCY_PAIR_CODE_LENGTH_URL) {
+            throw new ExchangeRateCurrencyCodePairException("The currency codes of the pair are missing from the address or it is specified incorrectly");
         } else {
-            throw new RequiredFormFieldIsMissingException("A required form field rate is missing ");
+            log.info("We get a PATCH request to update rate in currency pair {} to this {}", currencyPairCode, rateFromParameter);
+            if (CheckValidityOfParameter.checkValidityOfParameters(rateFromParameter) && rateFromParameter.contains("rate=")) {
+                int indexOfRate = rateFromParameter.indexOf("=");
+                String rateStr = rateFromParameter.substring(indexOfRate + 1);
+                BigDecimal rate = new BigDecimal(rateStr);
+                ExchangeRateResponse exchangeRateResponse = exchangeRateMapper.mapToResponse(exchangeRateService.updateExchangeRate(currencyPairCode, rate));
+                log.info("The exchange rate was updated");
+                resp.setStatus(HttpServletResponse.SC_OK);
+                out.print(objectMapper.writeValueAsString(exchangeRateResponse));
+            } else {
+                throw new RequiredFormFieldIsMissingException("A required form field rate is missing ");
+            }
         }
     }
 

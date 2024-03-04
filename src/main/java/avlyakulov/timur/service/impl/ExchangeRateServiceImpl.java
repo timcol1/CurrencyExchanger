@@ -26,14 +26,10 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
     }
 
     public ExchangeRate findByCodes(String currencyPairCode) {
-        if (currencyPairCode.isBlank() || currencyPairCode.length() != CURRENCY_PAIR_CODE_LENGTH_URL) {
-            throw new ExchangeRateCurrencyCodePairException("The currency codes of the pair are missing from the address or it is specified incorrectly");
-        } else {
-            String baseCurrencyCode = currencyPairCode.substring(0, 3);
-            String targetCurrencyCode = currencyPairCode.substring(3);
+        String baseCurrencyCode = currencyPairCode.substring(0, 3);
+        String targetCurrencyCode = currencyPairCode.substring(3);
 
-            return exchangeRateDao.findByCodes(baseCurrencyCode, targetCurrencyCode);
-        }
+        return exchangeRateDao.findByCodes(baseCurrencyCode, targetCurrencyCode);
     }
 
     public ExchangeRate createExchangeRate(ExchangeRate exchangeRate) {
