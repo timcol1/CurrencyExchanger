@@ -1,6 +1,8 @@
 package avlyakulov.timur.service.impl;
 
+import avlyakulov.timur.connection.DeploymentEnvironment;
 import avlyakulov.timur.dao.CurrencyDao;
+import avlyakulov.timur.dao.CurrencyDaoImpl;
 import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.service.CurrencyService;
 
@@ -8,11 +10,7 @@ import java.util.List;
 
 public class CurrencyServiceImpl implements CurrencyService {
 
-    private final CurrencyDao currencyDao;
-
-    public CurrencyServiceImpl(CurrencyDao currencyDao) {
-        this.currencyDao = currencyDao;
-    }
+    private final CurrencyDao currencyDao = new CurrencyDaoImpl(DeploymentEnvironment.PROD);
 
 
     public List<Currency> findAll() {

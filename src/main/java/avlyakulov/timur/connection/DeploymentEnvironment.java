@@ -1,4 +1,4 @@
-package avlyakulov.timur.dao;
+package avlyakulov.timur.connection;
 
 public enum DeploymentEnvironment {
     PROD,

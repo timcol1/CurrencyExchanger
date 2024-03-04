@@ -1,6 +1,5 @@
 package avlyakulov.timur.connection;
 
-import avlyakulov.timur.dao.DeploymentEnvironment;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
