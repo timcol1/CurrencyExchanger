@@ -1,5 +1,6 @@
 package avlyakulov.timur.dao;
 
+import avlyakulov.timur.connection.DeploymentEnvironment;
 import avlyakulov.timur.custom_exception.ExchangeRateAlreadyExistsException;
 import avlyakulov.timur.custom_exception.ExchangeRateCurrencyCodePairException;
 import avlyakulov.timur.custom_exception.ExchangeRateCurrencyPairNotFoundException;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 public class ExchangeRateDaoImpl extends JDBCDao implements ExchangeRateDao {
@@ -81,7 +83,6 @@ public class ExchangeRateDaoImpl extends JDBCDao implements ExchangeRateDao {
                 return setExchangeRate(resultSet);
             } else {
                 throw new ExchangeRateCurrencyPairNotFoundException("The exchange rate with such code pair " + baseCurrencyCode + targetCurrencyCode + " doesn't exist");
-
             }
         } catch (SQLException e) {
             log.error("Error with db");
@@ -119,6 +120,7 @@ public class ExchangeRateDaoImpl extends JDBCDao implements ExchangeRateDao {
             throw new RuntimeException(e);
         }
     }
+
 
     @Override
     public ExchangeRate update(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate) {
@@ -167,5 +169,15 @@ public class ExchangeRateDaoImpl extends JDBCDao implements ExchangeRateDao {
                 targetCurrency,
                 resultSet.getBigDecimal("Rate")
         );
+    }
+
+    @Override
+    public Optional<ExchangeRate> findById(long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public ExchangeRate update(ExchangeRate exchangeRate) {
+        return null;
     }
 }

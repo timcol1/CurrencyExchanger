@@ -1,13 +1,8 @@
 package avlyakulov.timur.servlets.exchange;
 
-import avlyakulov.timur.connection.ConnectionDB;
-import avlyakulov.timur.connection.DataSourceHikariPool;
-import avlyakulov.timur.dao.DeploymentEnvironment;
-import avlyakulov.timur.dao.ExchangeDaoImpl;
 import avlyakulov.timur.dto.exchange.ExchangeResponse;
-import avlyakulov.timur.mapper.ExchangeMapper;
-import avlyakulov.timur.service.ExchangeService;
-import avlyakulov.timur.service.impl.ExchangeServiceImpl;
+import avlyakulov.timur.service.ExchangeRateService;
+import avlyakulov.timur.service.impl.ExchangeRateServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,15 +19,14 @@ import java.math.BigDecimal;
 @WebServlet(urlPatterns = "/exchange")
 public class ExchangeServlet extends HttpServlet {
 
-    ExchangeService exchangeService;
+    ExchangeRateService exchangeRateService;
     ObjectMapper objectMapper;
-    ExchangeMapper exchangeMapper;
+
 
     @Override
     public void init() throws ServletException {
-        exchangeService = new ExchangeServiceImpl(new ExchangeDaoImpl(DeploymentEnvironment.PROD));
+        exchangeRateService = new ExchangeRateServiceImpl();
         objectMapper = new ObjectMapper();
-        exchangeMapper = new ExchangeMapper();
     }
 
     @Override
@@ -44,7 +38,7 @@ public class ExchangeServlet extends HttpServlet {
 
         log.info("We got a request to exchange with such parameters from {} to {} amount {}", baseCurrencyCode, targetCurrencyCode, amount);
 
-        ExchangeResponse exchangeResponse = exchangeMapper.mapToResponse(exchangeService.exchange(baseCurrencyCode, targetCurrencyCode, amount));
+        ExchangeResponse exchangeResponse = exchangeRateService.exchange(baseCurrencyCode, targetCurrencyCode, amount);
         resp.setStatus(HttpServletResponse.SC_OK);//status 200
         out.print(objectMapper.writeValueAsString(exchangeResponse));
         out.flush();

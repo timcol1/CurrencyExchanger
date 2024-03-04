@@ -2,7 +2,7 @@ package avlyakulov.timur.servlets.exchange;
 
 import avlyakulov.timur.custom_exception.ExchangeRateCurrencyCodePairException;
 import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissingException;
-import avlyakulov.timur.dao.DeploymentEnvironment;
+import avlyakulov.timur.connection.DeploymentEnvironment;
 import avlyakulov.timur.dao.ExchangeRateDaoImpl;
 import avlyakulov.timur.dto.exchange.ExchangeRateResponse;
 import avlyakulov.timur.mapper.ExchangeRateMapper;
@@ -33,7 +33,7 @@ public class ExchangeRateServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        exchangeRateService = new ExchangeRateServiceImpl(new ExchangeRateDaoImpl(DeploymentEnvironment.PROD));
+        exchangeRateService = new ExchangeRateServiceImpl();
         objectMapper = new ObjectMapper();
         exchangeRateMapper = new ExchangeRateMapper();
     }
