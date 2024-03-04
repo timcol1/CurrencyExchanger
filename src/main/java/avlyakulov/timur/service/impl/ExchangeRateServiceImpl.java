@@ -12,7 +12,7 @@ import java.util.Optional;
 
 
 public class ExchangeRateServiceImpl implements ExchangeRateService {
-    private final int CURRENCY_PAIR_CODE_LENGTH_URL = 6;
+
 
     private final ExchangeRateDao exchangeRateDao;
 
@@ -38,13 +38,9 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
 
 
     public ExchangeRate updateExchangeRate(String currencyPairCode, BigDecimal updatedRate) {
-        if (currencyPairCode.isBlank() || currencyPairCode.length() != CURRENCY_PAIR_CODE_LENGTH_URL) {
-            throw new ExchangeRateCurrencyCodePairException("The currency codes of the pair are missing from the address or it is specified incorrectly");
-        } else {
-            String baseCurrencyCode = currencyPairCode.substring(0, 3);
-            String targetCurrencyCode = currencyPairCode.substring(3);
+        String baseCurrencyCode = currencyPairCode.substring(0, 3);
+        String targetCurrencyCode = currencyPairCode.substring(3);
 
-            return exchangeRateDao.update(baseCurrencyCode, targetCurrencyCode, updatedRate);
-        }
+        return exchangeRateDao.update(baseCurrencyCode, targetCurrencyCode, updatedRate);
     }
 }

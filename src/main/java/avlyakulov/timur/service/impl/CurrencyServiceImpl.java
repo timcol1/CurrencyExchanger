@@ -7,7 +7,6 @@ import avlyakulov.timur.service.CurrencyService;
 import java.util.List;
 
 public class CurrencyServiceImpl implements CurrencyService {
-    private static final int CODE_LENGTH_URL = 3;
 
     private final CurrencyDao currencyDao;
 
