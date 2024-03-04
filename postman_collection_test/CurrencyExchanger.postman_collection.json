@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "132fc4da-d050-4087-ad34-8e46565c8c6a",
+		"_postman_id": "111f8dd4-8047-4b5c-a030-690a64dd1db4",
 		"name": "CurrencyExchanger",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "29613522"
@@ -11,7 +11,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": "http://localhost:8080/currencies"
+				"url": "http://localhost:8080/CurrencyExchanger-1.0/currencies"
 			},
 			"response": []
 		},
@@ -20,7 +20,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": "http://localhost:8080/currency/CZA"
+				"url": "http://localhost:8080/CurrencyExchanger-1.0/currency/CZK"
 			},
 			"response": []
 		},
@@ -34,22 +34,22 @@
 					"urlencoded": [
 						{
 							"key": "name",
-							"value": "Czech Koruna",
+							"value": "Brazilian Real",
 							"type": "text"
 						},
 						{
 							"key": "code",
-							"value": "CZA",
+							"value": "BRL",
 							"type": "text"
 						},
 						{
 							"key": "sign",
-							"value": "Kč",
+							"value": "R$",
 							"type": "text"
 						}
 					]
 				},
-				"url": "http://localhost:8080/currencies"
+				"url": "http://localhost:8080/CurrencyExchanger-1.0/currencies"
 			},
 			"response": []
 		},
@@ -58,7 +58,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": "http://localhost:8080/exchangeRates"
+				"url": "http://localhost:8080/CurrencyExchanger-1.0/exchangeRates"
 			},
 			"response": []
 		},
@@ -67,7 +67,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": "http://localhost:8080/exchangeRate/USDCZK"
+				"url": "http://localhost:8080/CurrencyExchanger-1.0/exchangeRate/USDEUR"
 			},
 			"response": []
 		},
@@ -81,22 +81,22 @@
 					"urlencoded": [
 						{
 							"key": "baseCurrencyCode",
-							"value": "EUR",
+							"value": "USD",
 							"type": "text"
 						},
 						{
 							"key": "targetCurrencyCode",
-							"value": "UAH",
+							"value": "CZK",
 							"type": "text"
 						},
 						{
 							"key": "rate",
-							"value": "40.41",
+							"value": "22.78",
 							"type": "text"
 						}
 					]
 				},
-				"url": "http://localhost:8080/exchangeRates"
+				"url": "http://localhost:8080/CurrencyExchanger-1.0/exchangeRates"
 			},
 			"response": []
 		},
@@ -110,12 +110,12 @@
 					"urlencoded": [
 						{
 							"key": "rate",
-							"value": "23.18",
+							"value": "0.93",
 							"type": "text"
 						}
 					]
 				},
-				"url": "http://localhost:8080/exchangeRate/USDCZK"
+				"url": "http://localhost:8080/CurrencyExchanger-1.0/exchangeRate/USDEUR"
 			},
 			"response": []
 		},
@@ -125,13 +125,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/exchange?from=EUR&to=UAH&amount=10",
+					"raw": "http://localhost:8080/CurrencyExchanger-1.0/exchange?from=EUR&to=UAH&amount=10",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"CurrencyExchanger-1.0",
 						"exchange"
 					],
 					"query": [
@@ -158,13 +159,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/exchange?from=UAH&to=EUR&amount=10",
+					"raw": "http://localhost:8080/CurrencyExchanger-1.0/exchange?from=UAH&to=EUR&amount=10",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"CurrencyExchanger-1.0",
 						"exchange"
 					],
 					"query": [
@@ -191,13 +193,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/exchange?from=PLN&to=CZK&amount=100",
+					"raw": "http://localhost:8080/CurrencyExchanger-1.0/exchange?from=PLN&to=CZK&amount=10",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"CurrencyExchanger-1.0",
 						"exchange"
 					],
 					"query": [
@@ -211,7 +214,7 @@
 						},
 						{
 							"key": "amount",
-							"value": "100"
+							"value": "10"
 						}
 					]
 				}

@@ -1,6 +1,5 @@
 package avlyakulov.timur.servlets.currency;
 
-import avlyakulov.timur.connection.ConnectionDB;
 import avlyakulov.timur.custom_exception.BadCurrencyCodeException;
 import avlyakulov.timur.dao.CurrencyDaoImpl;
 import avlyakulov.timur.dao.DeploymentEnvironment;
@@ -18,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 
 @Slf4j
 @WebServlet(urlPatterns = "/currency/*")
@@ -27,6 +25,8 @@ public class CurrencyServlet extends HttpServlet {
     private CurrencyService currencyService;
     private ObjectMapper objectMapper;
     private CurrencyMapper currencyMapper;
+
+    private static final int CODE_LENGTH_URL = 3;
 
     @Override
     public void init() throws ServletException {
@@ -44,9 +44,13 @@ public class CurrencyServlet extends HttpServlet {
             throw new BadCurrencyCodeException("Currency code is missing at address or you put wrong code");
         }
         String currencyCode = url.substring(lastIndexOfUrl + 1);
-        log.info("We got a request to find a currency with such code {}", currencyCode);
-        CurrencyResponse currencyResponse = currencyMapper.mapToResponse(currencyService.findByCode(currencyCode));
-        resp.setStatus(HttpServletResponse.SC_OK);
-        out.print(objectMapper.writeValueAsString(currencyResponse));
+        if (currencyCode.isBlank() || currencyCode.length() != CODE_LENGTH_URL) {
+            throw new BadCurrencyCodeException("Currency code is missing at address or you put wrong code");
+        } else {
+            log.info("We got a request to find a currency with such code {}", currencyCode);
+            CurrencyResponse currencyResponse = currencyMapper.mapToResponse(currencyService.findByCode(currencyCode));
+            resp.setStatus(HttpServletResponse.SC_OK);
+            out.print(objectMapper.writeValueAsString(currencyResponse));
+        }
     }
 }
