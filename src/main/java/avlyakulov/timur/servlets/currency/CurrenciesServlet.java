@@ -1,11 +1,6 @@
 package avlyakulov.timur.servlets.currency;
 
 import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissingException;
-import avlyakulov.timur.dao.CurrencyDaoImpl;
-import avlyakulov.timur.connection.DeploymentEnvironment;
-import avlyakulov.timur.dto.currency.CurrencyRequest;
-import avlyakulov.timur.dto.currency.CurrencyResponse;
-import avlyakulov.timur.mapper.CurrencyMapper;
 import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.service.CurrencyService;
 import avlyakulov.timur.service.impl.CurrencyServiceImpl;
@@ -28,23 +23,18 @@ public class CurrenciesServlet extends HttpServlet {
 
     private CurrencyService currencyService;
     private ObjectMapper objectMapper;
-    private CurrencyMapper currencyMapper;
 
     @Override
     public void init() throws ServletException {
         currencyService = new CurrencyServiceImpl();
         objectMapper = new ObjectMapper();
-        currencyMapper = new CurrencyMapper();
         log.info("Currencies servlet was created");
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info("We are getting all currencies");
-        List<CurrencyResponse> currencies = currencyService.findAll()
-                .stream()
-                .map(currencyMapper::mapToResponse)
-                .toList();
+        List<Currency> currencies = currencyService.findAll();
         PrintWriter out = resp.getWriter();
         resp.setStatus(HttpServletResponse.SC_OK);//status 200
         out.print(objectMapper.writeValueAsString(currencies));
@@ -61,7 +51,7 @@ public class CurrenciesServlet extends HttpServlet {
 
         if (CheckValidityOfParameter.checkValidityOfParameters(code, name, sign)) {
 
-            Currency currency = currencyMapper.mapToEntity(new CurrencyRequest(code, name, sign));
+            Currency currency = new Currency(code, name, sign);
 
             PrintWriter out = resp.getWriter();
 

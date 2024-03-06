@@ -1,6 +1,6 @@
 package avlyakulov.timur.servlets.exchange;
 
-import avlyakulov.timur.dto.exchange.ExchangeResponse;
+import avlyakulov.timur.dto.exchange.Exchange;
 import avlyakulov.timur.service.ExchangeRateService;
 import avlyakulov.timur.service.impl.ExchangeRateServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,9 +38,9 @@ public class ExchangeServlet extends HttpServlet {
 
         log.info("We got a request to exchange with such parameters from {} to {} amount {}", baseCurrencyCode, targetCurrencyCode, amount);
 
-        ExchangeResponse exchangeResponse = exchangeRateService.exchange(baseCurrencyCode, targetCurrencyCode, amount);
+        Exchange exchange = exchangeRateService.exchange(baseCurrencyCode, targetCurrencyCode, amount);
         resp.setStatus(HttpServletResponse.SC_OK);//status 200
-        out.print(objectMapper.writeValueAsString(exchangeResponse));
+        out.print(objectMapper.writeValueAsString(exchange));
         out.flush();
     }
 }

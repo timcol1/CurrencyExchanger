@@ -1,10 +1,7 @@
 package avlyakulov.timur.servlets.currency;
 
 import avlyakulov.timur.custom_exception.BadCurrencyCodeException;
-import avlyakulov.timur.dao.CurrencyDaoImpl;
-import avlyakulov.timur.connection.DeploymentEnvironment;
-import avlyakulov.timur.dto.currency.CurrencyResponse;
-import avlyakulov.timur.mapper.CurrencyMapper;
+import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.service.CurrencyService;
 import avlyakulov.timur.service.impl.CurrencyServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,7 +21,6 @@ public class CurrencyServlet extends HttpServlet {
 
     private CurrencyService currencyService;
     private ObjectMapper objectMapper;
-    private CurrencyMapper currencyMapper;
 
     private static final int CODE_LENGTH_URL = 3;
 
@@ -32,7 +28,6 @@ public class CurrencyServlet extends HttpServlet {
     public void init() throws ServletException {
         currencyService = new CurrencyServiceImpl();
         objectMapper = new ObjectMapper();
-        currencyMapper = new CurrencyMapper();
     }
 
     @Override
@@ -48,9 +43,9 @@ public class CurrencyServlet extends HttpServlet {
             throw new BadCurrencyCodeException("Currency code is missing at address or you put wrong code");
         } else {
             log.info("We got a request to find a currency with such code {}", currencyCode);
-            CurrencyResponse currencyResponse = currencyMapper.mapToResponse(currencyService.findByCode(currencyCode));
+            Currency currency = currencyService.findByCode(currencyCode);
             resp.setStatus(HttpServletResponse.SC_OK);
-            out.print(objectMapper.writeValueAsString(currencyResponse));
+            out.print(objectMapper.writeValueAsString(currency));
         }
     }
 }

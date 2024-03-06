@@ -1,17 +1,6 @@
 package avlyakulov.timur.dao;
 
 import avlyakulov.timur.connection.DeploymentEnvironment;
-import avlyakulov.timur.custom_exception.ExchangeRateCurrencyPairNotFoundException;
-import avlyakulov.timur.dto.exchange.ExchangeResponse;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.net.URISyntaxException;
-import java.sql.SQLException;
 
 class ExchangeDaoTest {
 

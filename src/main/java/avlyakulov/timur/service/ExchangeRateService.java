@@ -1,6 +1,6 @@
 package avlyakulov.timur.service;
 
-import avlyakulov.timur.dto.exchange.ExchangeResponse;
+import avlyakulov.timur.dto.exchange.Exchange;
 import avlyakulov.timur.model.ExchangeRate;
 
 import java.math.BigDecimal;
@@ -16,5 +16,5 @@ public interface ExchangeRateService {
 
     ExchangeRate updateExchangeRate(String currencyPairCode, BigDecimal updatedRate);
 
-    ExchangeResponse exchange(String baseCurrencyCode,String targetCurrencyCode, BigDecimal amount);
+    Exchange exchange(String baseCurrencyCode, String targetCurrencyCode, BigDecimal amount);
 }

@@ -1,7 +1,6 @@
 package avlyakulov.timur.servlets.currency;
 
 import avlyakulov.timur.custom_exception.RequiredFormFieldIsMissingException;
-import avlyakulov.timur.mapper.CurrencyMapper;
 import avlyakulov.timur.model.Currency;
 import avlyakulov.timur.service.CurrencyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,8 +30,6 @@ class CurrenciesServletTest {
     private HttpServletResponse response;
     @Mock
     private CurrencyService currencyService;
-    @Mock
-    private CurrencyMapper currencyMapper;
 
     @Mock
     private ObjectMapper objectMapper;
