@@ -12,7 +12,7 @@
 * Mockito
 * Hikari Pool
 
-Project from practise course https://zhukovsd.github.io/java-backend-learning-course/Projects/CurrencyExchange/
+Project from this [course](https://zhukovsd.github.io/java-backend-learning-course/) 
 
 ## Technologies
 The project is developed using Jakarta Servlets I also wrote Unit tests for this app and it is supports Tomcat 10 server. I used sql database as SQLite. I also used Hikari pool to make connection to Database. I
